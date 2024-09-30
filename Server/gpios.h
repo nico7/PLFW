@@ -3,8 +3,8 @@
 
 #include <stdint.h>
 
-#define GPIOS_UART        0
-#define GPIOS_NO_UART     1
+#define GPIOS_UART        1
+#define GPIOS_NO_UART     0
 
 #define UP_BUTTON     0
 #define DOWN_BUTTON   1

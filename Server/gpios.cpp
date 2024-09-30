@@ -18,7 +18,7 @@ void gpios_init(uint8_t using_uart)
   pinMode(OLED_CS_N, OUTPUT);
   pinMode(FRAM_CS_N, OUTPUT);
   
-  if(0 == using_uart)
+  if(GPIOS_NO_UART == using_uart)
   {
     pinMode(SELECT, INPUT);
     pinMode(BACK, INPUT);

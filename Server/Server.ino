@@ -7,7 +7,7 @@ const int output18 = 18;
 
 void setup()
 {
-  Serial.begin(115200);
+  // Serial.begin(115200);
 
   // Initialize the output variables as outputs
   gpios_init(GPIOS_UART);
