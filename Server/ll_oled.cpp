@@ -10,17 +10,29 @@
 
 static void ll_oled_init_symbols(void);
 
-const SPISettings spiSettings(2000000, MSBFIRST, SPI_MODE0);
+const SPISettings spiSettings(4000000, MSBFIRST, SPI_MODE0);
 
 static uint8_t myScreen[64][128] = { 0 };
 static uint8_t rastScreen[NUM_PAGES][128] = {0};
 
 static uint8_t scrx, scry;    // These keep track of where symbols are written on the screen
 
+void ll_oled_start(void) {
+  SPI.begin(PL_SCK, PL_MISO, PL_MOSI);
+  digitalWrite(OLED_CS_N, LOW);
+  SPI.beginTransaction(spiSettings);
+}
+
+void ll_oled_end(void) {
+  digitalWrite(OLED_CS_N, HIGH);
+  SPI.endTransaction();
+  SPI.end();
+}
+
 void ll_oled_init(void) {
   scrx = 0;
   scry = 0;
-  Serial.begin(115200);
+  
   digitalWrite(OLED_RST_N, LOW);
   delay(10);
   digitalWrite(OLED_RST_N, HIGH);
@@ -53,8 +65,8 @@ void ll_oled_init(void) {
   ll_oled_send_cmd(SET_NRML_DISP);
   ll_oled_send_cmd(DISPLAY_ON);
 
-  ll_oled_clear();
-  char str[100] = "\n\n            FOTOnico\n";
+  ll_oled_clear(CLEAR_OLED);
+  char str[100] = "0123456789   ABCDEFGHIJKLMNOPQRSTUVWXYZ\nabcdefghijklmnop\n\rqrstuvwxyz.[µ";
   ll_oled_print((uint8_t *)str, sizeof(str));
 
   ll_oled_display_screen();
@@ -62,17 +74,6 @@ void ll_oled_init(void) {
   ll_oled_end();
 }
 
-void ll_oled_start(void) {
-  SPI.begin(PL_SCK, PL_MISO, PL_MOSI);
-  digitalWrite(OLED_CS_N, LOW);
-  SPI.beginTransaction(spiSettings);
-}
-
-void ll_oled_end(void) {
-  digitalWrite(OLED_CS_N, HIGH);
-  SPI.endTransaction();
-  SPI.end();
-}
 
 void ll_oled_send_cmd(uint8_t cmd) {
   digitalWrite(DATA_CMD_N, LOW);
@@ -123,8 +124,14 @@ void ll_oled_display_screen(void)
   }
 }
 
-void ll_oled_clear(void)
+void ll_oled_clear(uint8_t reset_locations)
 {
+    if(reset_locations)
+    {
+      scrx = 0;
+      scry = 0;
+    }
+
     memset(myScreen, 0, sizeof(myScreen));
 }
 
@@ -174,7 +181,6 @@ void ll_oled_print(uint8_t * str, uint16_t size)
         scrx += 3;
         break;
       case '\n':
-        scrx = 0;
         if(scry >= SCREEN_HEIGHT - LINE_HEIGHT)
         {
           scry = 0;
@@ -183,6 +189,9 @@ void ll_oled_print(uint8_t * str, uint16_t size)
         {
           scry += LINE_HEIGHT;
         }
+        break;
+      case '\r':
+        scrx = 0;
         break;
       default:
 
@@ -260,6 +269,7 @@ static void ll_oled_init_symbols(void)
   letterMap[0x37] = num_7_10;
   letterMap[0x38] = num_8_10;
   letterMap[0x39] = num_9_10;
+  letterMap[0x2E] = period_10;
   
   widthMap[0x41] = A_10_WIDTH;
   widthMap[0x42] = B_10_WIDTH;
@@ -325,4 +335,5 @@ static void ll_oled_init_symbols(void)
   widthMap[0x37] = NUM_7_WIDTH;
   widthMap[0x38] = NUM_8_WIDTH;
   widthMap[0x39] = NUM_9_WIDTH;
+  widthMap[0x2E] = PERIOD_WIDTH;
 }

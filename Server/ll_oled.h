@@ -1,7 +1,11 @@
 #ifndef __LL_OLED_H_
 #define __LL_OLED_H_
 
+
 #include <stdint.h>
+
+#define CLEAR_OLED 1
+#define NO_CLEAR   0
 
 #define SCREEN_WIDTH  128
 #define SCREEN_HEIGHT 64
@@ -55,7 +59,7 @@ void ll_oled_send_cmd( uint8_t cmd);
 void ll_oled_send_data(uint8_t * data, uint16_t size);
 void rasterize(void);
 void ll_oled_display_screen(void);
-void ll_oled_clear(void);
+void ll_oled_clear(uint8_t reset_locations);
 void ll_oled_print(uint8_t * string, uint16_t size);
 
 

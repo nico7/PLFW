@@ -30,6 +30,7 @@ void gpios_init(uint8_t using_uart)
   digitalWrite(LASER_ENABLE, LOW);
   digitalWrite(SHUTTER, LOW);
   digitalWrite(DAC_CS_N, HIGH);
+  
   digitalWrite(DATA_CMD_N, LOW);
   digitalWrite(OLED_CS_N, HIGH);
   digitalWrite(FRAM_CS_N, HIGH);

@@ -16,6 +16,7 @@
 #endif // __SECRETS_H_
 */
 
+
 static WifiStatus_E wifi_state = BE_DISCONNECTED;
 const char* ssid = SSID;
 const char* password = PWD;
