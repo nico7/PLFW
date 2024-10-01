@@ -21,6 +21,8 @@ const char* ssid = SSID;
 const char* password = PWD;
 const char* hostname = "nico";
 
+static char ip_address[16];
+
 WiFiServer server(80);
 
 String header;
@@ -55,6 +57,10 @@ void back_end_sm(void) {
       Serial.println("WiFi connected.");
       Serial.println("IP address: ");
       Serial.println(WiFi.localIP());
+      snprintf(ip_address, sizeof(ip_address), "%d %d %d %d",
+             WiFi.localIP()[0], WiFi.localIP()[1],
+             WiFi.localIP()[2], WiFi.localIP()[3]);
+
       server.begin();
 
       break;
@@ -148,5 +154,14 @@ void back_end_sm(void) {
       break;
     default:
       break;
+  }
+}
+
+void be_get_ip(char * buffer)
+{
+  uint8_t i;
+  for(i = 0; i < 16; i++)
+  {
+    buffer[i] = ip_address[i];
   }
 }

@@ -8,7 +8,7 @@ typedef enum wifi_status
 } WifiStatus_E;
 
 void back_end_sm(void);
-
+void be_get_ip(char * buffer);
 
 
 
