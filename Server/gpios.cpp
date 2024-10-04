@@ -5,8 +5,8 @@
 
 void gpios_init(uint8_t using_uart)
 {
-  pinMode(UP_BUTTON, INPUT);
-  pinMode(DOWN_BUTTON, INPUT);
+  pinMode(UP_BTN, INPUT);
+  pinMode(DOWN_BTN, INPUT);
   pinMode(DAC_LATCH_N, OUTPUT);
   pinMode(TEC_ENABLE, OUTPUT);
   pinMode(FAULT_N, INPUT);
@@ -20,8 +20,8 @@ void gpios_init(uint8_t using_uart)
   
   if(GPIOS_NO_UART == using_uart)
   {
-    pinMode(SELECT, INPUT);
-    pinMode(BACK, INPUT);
+    pinMode(SELECT_BTN, INPUT);
+    pinMode(BACK_BTN, INPUT);
   }
   
   digitalWrite(DAC_LATCH_N, HIGH);

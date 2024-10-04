@@ -66,8 +66,8 @@ void ll_oled_init(void) {
   ll_oled_send_cmd(DISPLAY_ON);
 
   ll_oled_clear(CLEAR_OLED);
-  char str[100] = "0123456789   ABCDEFGHIJKLMNOPQRSTUVWXYZ\nabcdefghijklmnop\n\rqrstuvwxyz.[µ";
-  ll_oled_print((uint8_t *)str, sizeof(str));
+  //char str[100] = "0123456789   ABCDEFGHIJKLMNOPQRSTUVWXYZ\nabcdefghijklmnop\n\rqrstuvwxyz.[µ";
+  //ll_oled_print((uint8_t *)str, sizeof(str));
 
   ll_oled_display_screen();
   

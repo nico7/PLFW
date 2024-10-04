@@ -6,8 +6,8 @@
 #define GPIOS_UART        1
 #define GPIOS_NO_UART     0
 
-#define UP_BUTTON     0
-#define DOWN_BUTTON   1
+#define UP_BTN        0
+#define DOWN_BTN      1
 #define THERMISTOR    2
 #define LASER_MON     3
 
@@ -23,14 +23,14 @@
 
 #define DAC_CS_N      15
 
-#define SELECT        16
-#define BACK          17
+#define SELECT_BTN    16
+#define BACK_BTN      17
 #define DATA_CMD_N    18
 #define OLED_CS_N     19
 
-#define PL_MOSI          20
-#define PL_SCK           21
-#define PL_MISO          22
+#define PL_MOSI       20
+#define PL_SCK        21
+#define PL_MISO       22
 #define FRAM_CS_N     23
 
 

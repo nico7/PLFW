@@ -50,14 +50,15 @@ void dac_write(uint8_t cmd, uint8_t * data)
 void dac_init(void)
 {
   uint8_t buffer[2] = {0, 0 };
-  char str [20];
-
+ 
   ll_dac_start();
   
-  //dac_config(TEC_REG, buffer);
-  //dac_config(LASER_REG, buffer);
-  
   buffer[0] = 0x00;
+  buffer[1] = 0x00;
+  
+  dac_write(TEC_REG, buffer);
+  dac_write(LASER_REG, buffer);
+  
   buffer[1] = VREF_VREFPIN;
   dac_write(VREF_REG, buffer);
   
@@ -68,20 +69,16 @@ void dac_init(void)
   buffer[1] = 0x00;
   dac_write(GAIN_REG, buffer);
   ll_dac_end();
-  Serial.begin(115200);
-  Serial.println(str);
-  ll_oled_clear(CLEAR_OLED);
-  strcpy(str, "The status reg = \n\r\0\0");
-  oled_print((uint8_t *)str, sizeof(str));
-  memset(str, 0, sizeof(str));
-  sprintf(str, "0x%X%X\0", buffer[0], buffer[1]);
-  oled_print((uint8_t *)str, sizeof(str));
-  oled_print((uint8_t *)" ", 1);
 }
 
-void dac_setpoint(uint8_t device, uint8_t value)
+void dac_setpoint(uint8_t device, uint8_t *value)
 {
+  
+  Serial.print("Value = ");
+  Serial.println(*value);
+  
   ll_dac_start();
+  //TODO: If the value is less than 1V, change the gain to x1 for more resolution
   if(device == LASER)
   {
       dac_write(LASER_REG, value);
@@ -89,23 +86,39 @@ void dac_setpoint(uint8_t device, uint8_t value)
   else
   {
       dac_write(TEC_REG, value);
+      dac_read(TEC_REG, value);
+
   }
+  Serial.print("Value read = ");
+  Serial.println(*value);
   ll_dac_end();
 
 }
 
 void dac_set_current(uint8_t device, uint16_t mA)
 {
+  uint8_t val_buffer[2];
   uint8_t value;
 
   if(device == LASER)
   {
-    value = (uint8_t) (mA/LASER_MAX_A);
+    value = (uint8_t) ((mA*256)/LASER_MAX_mA);
   }
   else
   {
-    value = (uint8_t) (ma/TEC_MAX_A);
+    value = (uint8_t) ((mA*256)/TEC_MAX_mA);
   }
+  
+  val_buffer[0] = 0x00;
+  val_buffer[1] = value;
+  dac_setpoint(device, val_buffer);
+  
 
-  dac_setpoint(device, value);
 }
+
+
+
+
+
+
+
