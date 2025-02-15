@@ -134,6 +134,7 @@ void back_end_sm(void) {
             client.println(".button { background-color: #4CAF50; border: none; color: white; padding: 16px 40px;");
             client.println("text-decoration: none; font-size: 30px; margin: 2px; cursor: pointer;}");
             client.println(".gray {background-color: #555555;}");
+            client.println(".blue {background-color: #2291E9;}");
             client.println(".red {background-color: #AA0000;}</style></head>");
             
             // Web Page Heading
@@ -159,6 +160,16 @@ void back_end_sm(void) {
               client.println("<p><a href=\"/LSR/on\"><button class=\"button red\">TURN ON</button></a></p>");
             }
             
+            client.println("<p>TEC is " + off_on[tec_state] + "</p>");
+            if(tec_state == ON)
+            {
+              client.println("<p><a href=\"/TEC/off\"><button class=\"button gray\">TURN OFF</button></a></p>");
+            }
+            else
+            {
+              client.println("<p><a href=\"/TEC/on\"><button class=\"button blue\">TURN ON</button></a></p>");
+            }
+
             client.println("</body></html>");
             
                   // The HTTP response ends with another blank line
