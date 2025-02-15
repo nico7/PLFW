@@ -4,8 +4,8 @@
 
 #include <stdint.h>
 
-#define CLEAR_OLED 1
-#define NO_CLEAR   0
+#define CLEAR_RESET     1
+#define CLEAR_NO_RESET  0
 
 #define SCREEN_WIDTH  128
 #define SCREEN_HEIGHT 64

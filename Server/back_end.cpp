@@ -1,26 +1,15 @@
 #include "back_end.h"
+#include "laser.h"
+#include "tec.h"
 
 #include <Arduino.h>
 #include <WiFi.h>
 #include <mDNS.h>
 
 #include "gpios.h"
-#include "secrets.h"    // create a file called secrets.h that you don't upload to git, that looks like the following:
-/* 
-#ifndef __SECRETS_H_
-#define __SECRETS_H_
-
-#define SSID = "your_ssid_inside_quotes";
-#define PWD = "your_wifi_password_inside_quotes";
-
-#endif // __SECRETS_H_
-*/
-
+#include "oled.h"
 
 static WifiStatus_E wifi_state = BE_DISCONNECTED;
-const char* ssid = SSID;
-const char* password = PWD;
-const char* hostname = "nico";
 
 static char ip_address[16];
 
@@ -28,8 +17,9 @@ WiFiServer server(80);
 
 String header;
 
-String SHUTTERState = "off";
-
+static String SHUTTERState;
+static String LASERState;
+static String TECState;
 
 
 // Current time
@@ -42,15 +32,7 @@ const long timeoutTime = 2000;
 void back_end_sm(void) {
   switch (wifi_state) {
     case BE_DISCONNECTED:
-      // Connect to Wi-Fi network with SSID and password
-      Serial.print("Connecting to ");
-      Serial.println(ssid);
-      WiFi.begin(ssid, password);
 
-      while (WiFi.status() != WL_CONNECTED) {
-        delay(500);
-        Serial.print(".");
-      }
   
       wifi_state = BE_CONNECTED;
 
@@ -58,9 +40,11 @@ void back_end_sm(void) {
       Serial.println("WiFi connected.");
       Serial.println("IP address: ");
       Serial.println(WiFi.localIP());
-      snprintf(ip_address, sizeof(ip_address), "%d %d %d %d",
+      snprintf(ip_address, sizeof(ip_address), "%d.%d.%d.%d",
              WiFi.localIP()[0], WiFi.localIP()[1],
              WiFi.localIP()[2], WiFi.localIP()[3]);
+
+      oled_print((uint8_t *) ip_address, sizeof(ip_address));
 
       server.begin();
 
@@ -95,16 +79,46 @@ void back_end_sm(void) {
                   client.println();
 
                   // turns the GPIOs on and off
-                  if (header.indexOf("GET /SHUTTER/on") >= 0) {
+                  if (header.indexOf("GET / ") >= 0)
+                  {
+                    SHUTTERState = "off";
+                    LASERState = "off";
+                    TECState = "off";
+                  }
+                  else if (header.indexOf("GET /SHTR/on") >= 0) 
+                  {
                     // Serial.println("GPIO SHUTTER on");
                     SHUTTERState = "on";
                     digitalWrite(SHUTTER, HIGH);
-                  } else if (header.indexOf("GET /SHUTTER/off") >= 0) {
+                  } 
+                  else if (header.indexOf("GET /SHTR/off") >= 0) 
+                  {
                     // Serial.println("GPIO SHUTTER off");
                     SHUTTERState = "off";
                     digitalWrite(SHUTTER, LOW);
                   }
-                  /* 
+
+                  if(header.indexOf("GET /LSR/on") >= 0)
+                  {
+                    LASERState = "on";
+                    laser_enable(true);
+                  }
+                  else if(header.indexOf("GET /LSR/off") >= 0)
+                  {
+                    LASERState = "off";
+                    laser_enable(false);
+                  }
+                   
+                   if(header.indexOf("GET /TEC/on") >= 0)
+                  {
+                    TECState = "on";
+                    tec_enable(true);
+                  }
+                  else if(header.indexOf("GET /TEC/off") >= 0)
+                  {
+                    TECState = "off";
+                    tec_enable(false);
+                  }
             // Display the HTML web page
             client.println("<!DOCTYPE html><html>");
             client.println("<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">");
@@ -117,20 +131,30 @@ void back_end_sm(void) {
             client.println(".button2 {background-color: #555555;}</style></head>");
             
             // Web Page Heading
-            client.println("<body><h1>ESP32 Web Server</h1>");
+            client.println("<body><h1>FN530 CTRL PANEL</h1>");
             
             // Display current state, and ON/OFF buttons for GPIO 4  
-            client.println("<p>GPIO SHUTTER - State " + SHUTTERState + "</p>");
+            client.println("<p>SHUTTER is " + SHUTTERState + "</p>");
             // If the SHUTTERState is off, it displays the ON button       
-            if (SHUTTERState=="off") {
-              client.println("<p><a href=\"/SHUTTER/on\"><button class=\"button\">ON</button></a></p>");
-            } else {
-              client.println("<p><a href=\"/SHUTTER/off\"><button class=\"button button2\">OFF</button></a></p>");
+            if (SHUTTERState == "on") {
+              client.println("<p><a href=\"/SHTR/off\"><button class=\"button button2\">TURN OFF</button></a></p>");
+            } else
+            {
+              client.println("<p><a href=\"/SHTR/on\"><button class=\"button\">TURN ON</button></a></p>");
             } 
-               
+
+            client.println("<p>LASER is " + LASERState + "</p>");
+            if(LASERState == "on")
+            {
+              client.println("<p><a href=\"/LSR/off\"><button class=\"button button2\">TURN OFF</button></a></p>");
+            }
+            else
+            {
+              client.println("<p><a href=\"/LSR/on\"><button class=\"button button4\">TURN ON</button></a></p>");
+            }
             
             client.println("</body></html>");
-            */
+            
                   // The HTTP response ends with another blank line
                   //client.println();
                   // Break out of the while loop
@@ -155,14 +179,5 @@ void back_end_sm(void) {
       break;
     default:
       break;
-  }
-}
-
-void be_get_ip(char * buffer)
-{
-  uint8_t i;
-  for(i = 0; i < 16; i++)
-  {
-    buffer[i] = ip_address[i];
   }
 }

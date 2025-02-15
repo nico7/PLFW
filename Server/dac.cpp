@@ -6,9 +6,7 @@
 
 #include "gpios.h"
 #include "oled.h"
-const SPISettings spiSettings(4000000, MSBFIRST, SPI_MODE0);
-
-
+const SPISettings spiSettings(1000000, MSBFIRST, SPI_MODE0);
 
 static void ll_dac_start(void) 
 {
@@ -26,7 +24,7 @@ static void ll_dac_end(void)
 
 static void dac_config(uint8_t cmd, uint8_t *data)
 {
-  digitalWrite(DAC_LATCH_N, LOW);
+   digitalWrite(DAC_LATCH_N, LOW);
    SPI.transfer(cmd);
    data[0] = SPI.transfer(data[0]);
    data[1] = SPI.transfer(data[1]);
@@ -74,8 +72,8 @@ void dac_init(void)
 void dac_setpoint(uint8_t device, uint8_t *value)
 {
   
-  Serial.print("Value = ");
-  Serial.println(*value);
+  Serial.print("1. DAC Value = ");
+  Serial.println(value[1]);
   
   ll_dac_start();
   //TODO: If the value is less than 1V, change the gain to x1 for more resolution
@@ -90,12 +88,12 @@ void dac_setpoint(uint8_t device, uint8_t *value)
 
   }
   Serial.print("Value read = ");
-  Serial.println(*value);
+  Serial.println(value[1]);
   ll_dac_end();
 
 }
 
-void dac_set_current(uint8_t device, uint16_t mA)
+void dac_set_current(dac_signal_E device, uint16_t mA)
 {
   uint8_t val_buffer[2];
   uint8_t value;
@@ -112,7 +110,8 @@ void dac_set_current(uint8_t device, uint16_t mA)
   val_buffer[0] = 0x00;
   val_buffer[1] = value;
   dac_setpoint(device, val_buffer);
-  
+  Serial.print("DAC set at ");
+  Serial.println(value);
 
 }
 

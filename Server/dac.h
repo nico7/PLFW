@@ -3,9 +3,6 @@
 
 #include <stdint.h>
 
-#define TEC   0
-#define LASER 1
-
 #define LASER_MAX_mA   480 // mA
 #define TEC_MAX_mA    2000 // mA
 
@@ -23,10 +20,16 @@
 #define GAINx1        0x00
 #define GAINx2        0x03
 
+typedef enum dac_signal
+{
+  TEC   = 0,
+  LASER = 1,
+} dac_signal_E;
+
 void dac_init(void);
 void dac_read(uint8_t cmd, uint8_t * data);
 void dac_write(uint8_t cmd, uint8_t * data);
 void dac_setpoint(uint8_t device, uint8_t *value);
-void dac_set_current(uint8_t device, uint16_t mA);
+void dac_set_current(dac_signal_E device, uint16_t mA);
 
 #endif // __DAC_H_

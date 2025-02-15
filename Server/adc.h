@@ -1,0 +1,17 @@
+#ifndef __ADC_H_
+#define __ADC_H_
+
+#include <stdint.h>
+
+typedef enum adc_signal {
+ADC_TEC = 0,
+ADC_LSR = 1,
+ADC_THR = 2,
+ADC_HTR = 3,
+}adc_signal_E;
+
+void adc_init(void);
+uint8_t adc_read(adc_signal_E ch, uint16_t * data);
+
+
+#endif //__ADC_H_

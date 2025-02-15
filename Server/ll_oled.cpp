@@ -10,7 +10,7 @@
 
 static void ll_oled_init_symbols(void);
 
-const SPISettings spiSettings(4000000, MSBFIRST, SPI_MODE0);
+const SPISettings spiSettings(2000000, MSBFIRST, SPI_MODE0);
 
 static uint8_t myScreen[64][128] = { 0 };
 static uint8_t rastScreen[NUM_PAGES][128] = {0};
@@ -43,7 +43,7 @@ void ll_oled_init(void) {
   /*ll_oled_send_cmd(SET_CLK_DIV_RATIO_FMODE);
  */
 
-  ll_oled_send_cmd(SET_MULTIPLEX_ROT_MODE);
+  ll_oled_send_cmd(RECOMMENDED_MULTIPLEX);
   ll_oled_send_cmd(RECOMMENDED_MULTIPLEX);
 
   ll_oled_send_cmd(SET_DC_DC_MODE);
@@ -64,9 +64,10 @@ void ll_oled_init(void) {
   ll_oled_send_cmd(SET_VCOM_DESEL_LVL_DATA);
   ll_oled_send_cmd(SET_NRML_DISP);
   ll_oled_send_cmd(DISPLAY_ON);
-
-  ll_oled_clear(CLEAR_OLED);
-  //char str[100] = "0123456789   ABCDEFGHIJKLMNOPQRSTUVWXYZ\nabcdefghijklmnop\n\rqrstuvwxyz.[µ";
+  ll_oled_send_cmd(SET_SEG_REMAP | 0x01);
+  ll_oled_send_cmd(SET_SCAN_DIR | 0x08);
+  ll_oled_clear(CLEAR_RESET);
+  //char str[100] = "0123456789   ABCDEFGHIJKLMNOPQRSTUVWXYZ\nabcdefghijklmnop\n\rqrstuvwxyz.[µ]";
   //ll_oled_print((uint8_t *)str, sizeof(str));
 
   ll_oled_display_screen();
@@ -205,6 +206,10 @@ void ll_oled_print(uint8_t * str, uint16_t size)
 
 static void ll_oled_init_symbols(void)
 {
+  letterMap[0x0F] = select_s_10;  // ☼
+  letterMap[0x18] = up_s_10;      // ↑
+  letterMap[0x19] = down_s_10;    // ↓
+  letterMap[0x1B] = back_s_10;    // ←
   letterMap[0x41] = A_10;
   letterMap[0x42] = B_10;
   letterMap[0x43] = C_10;
@@ -259,6 +264,7 @@ static void ll_oled_init_symbols(void)
   letterMap[0x7A] = z_10;
   letterMap[0xB5] = µ_10;
   letterMap[0x5B] = Ω_10;
+  letterMap[0x5D] = γ_10;
   letterMap[0x30] = num_0_10;
   letterMap[0x31] = num_1_10;
   letterMap[0x32] = num_2_10;
@@ -270,7 +276,12 @@ static void ll_oled_init_symbols(void)
   letterMap[0x38] = num_8_10;
   letterMap[0x39] = num_9_10;
   letterMap[0x2E] = period_10;
+  letterMap[0x3A] = colon_10;
   
+  widthMap[0x0F] = SELECT_S_WIDTH;  // ☼
+  widthMap[0x18] = UP_S_WIDTH;      // ↑
+  widthMap[0x19] = DOWN_S_WIDTH;    // ↓
+  widthMap[0x1B] = BACK_S_WIDTH;    // ←
   widthMap[0x41] = A_10_WIDTH;
   widthMap[0x42] = B_10_WIDTH;
   widthMap[0x43] = C_10_WIDTH;
@@ -323,8 +334,9 @@ static void ll_oled_init_symbols(void)
   widthMap[0x78] = x_10_WIDTH;
   widthMap[0x79] = y_10_WIDTH;
   widthMap[0x7A] = z_10_WIDTH;
-  widthMap[0xB5] = µ_10_WIDTH;
-  widthMap[0x5B] = Ω_10_WIDTH;
+  widthMap[0xB5] = µ_10_WIDTH;  // 
+  widthMap[0x5B] = Ω_10_WIDTH;  // [
+  widthMap[0x5D] = γ_10_WIDTH;  // ]
   widthMap[0x30] = NUM_0_WIDTH;
   widthMap[0x31] = NUM_1_WIDTH;
   widthMap[0x32] = NUM_2_WIDTH;
@@ -336,4 +348,5 @@ static void ll_oled_init_symbols(void)
   widthMap[0x38] = NUM_8_WIDTH;
   widthMap[0x39] = NUM_9_WIDTH;
   widthMap[0x2E] = PERIOD_WIDTH;
+  widthMap[0x3A] = COLON_WIDTH;
 }
