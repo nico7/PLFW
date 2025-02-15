@@ -9,6 +9,9 @@
 #include "gpios.h"
 #include "oled.h"
 
+#define ON  2
+#define OFF 1
+
 static WifiStatus_E wifi_state = BE_DISCONNECTED;
 
 static char ip_address[16];
@@ -17,9 +20,11 @@ WiFiServer server(80);
 
 String header;
 
-static String SHUTTERState;
-static String LASERState;
-static String TECState;
+const  String off_on[3] = {"?", "off", "on"};
+
+static uint8_t shutter_state  = OFF;
+static uint8_t laser_state    = OFF;
+static uint8_t tec_state      = OFF;
 
 
 // Current time
@@ -81,42 +86,42 @@ void back_end_sm(void) {
                   // turns the GPIOs on and off
                   if (header.indexOf("GET / ") >= 0)
                   {
-                    SHUTTERState = "off";
-                    LASERState = "off";
-                    TECState = "off";
+                    shutter_state = OFF;
+                    laser_state   = OFF;
+                    tec_state     = OFF;
                   }
                   else if (header.indexOf("GET /SHTR/on") >= 0) 
                   {
                     // Serial.println("GPIO SHUTTER on");
-                    SHUTTERState = "on";
+                    shutter_state = ON;
                     digitalWrite(SHUTTER, HIGH);
                   } 
                   else if (header.indexOf("GET /SHTR/off") >= 0) 
                   {
                     // Serial.println("GPIO SHUTTER off");
-                    SHUTTERState = "off";
+                    shutter_state = OFF;
                     digitalWrite(SHUTTER, LOW);
                   }
 
                   if(header.indexOf("GET /LSR/on") >= 0)
                   {
-                    LASERState = "on";
+                    laser_state = ON;
                     laser_enable(true);
                   }
                   else if(header.indexOf("GET /LSR/off") >= 0)
                   {
-                    LASERState = "off";
+                    laser_state = OFF;
                     laser_enable(false);
                   }
                    
                    if(header.indexOf("GET /TEC/on") >= 0)
                   {
-                    TECState = "on";
+                    tec_state = ON;
                     tec_enable(true);
                   }
                   else if(header.indexOf("GET /TEC/off") >= 0)
                   {
-                    TECState = "off";
+                    tec_state = OFF;
                     tec_enable(false);
                   }
             // Display the HTML web page
@@ -128,29 +133,30 @@ void back_end_sm(void) {
             client.println("<style>html { font-family: Helvetica; display: inline-block; margin: 0px auto; text-align: center;}");
             client.println(".button { background-color: #4CAF50; border: none; color: white; padding: 16px 40px;");
             client.println("text-decoration: none; font-size: 30px; margin: 2px; cursor: pointer;}");
-            client.println(".button2 {background-color: #555555;}</style></head>");
+            client.println(".gray {background-color: #555555;}");
+            client.println(".red {background-color: #AA0000;}</style></head>");
             
             // Web Page Heading
             client.println("<body><h1>FN530 CTRL PANEL</h1>");
             
             // Display current state, and ON/OFF buttons for GPIO 4  
-            client.println("<p>SHUTTER is " + SHUTTERState + "</p>");
+            client.println("<p>SHUTTER is " + off_on[shutter_state] + "</p>");
             // If the SHUTTERState is off, it displays the ON button       
-            if (SHUTTERState == "on") {
-              client.println("<p><a href=\"/SHTR/off\"><button class=\"button button2\">TURN OFF</button></a></p>");
+            if (shutter_state == ON) {
+              client.println("<p><a href=\"/SHTR/off\"><button class=\"button gray\">TURN OFF</button></a></p>");
             } else
             {
               client.println("<p><a href=\"/SHTR/on\"><button class=\"button\">TURN ON</button></a></p>");
             } 
 
-            client.println("<p>LASER is " + LASERState + "</p>");
-            if(LASERState == "on")
+            client.println("<p>LASER is " + off_on[laser_state] + "</p>");
+            if(laser_state == ON)
             {
-              client.println("<p><a href=\"/LSR/off\"><button class=\"button button2\">TURN OFF</button></a></p>");
+              client.println("<p><a href=\"/LSR/off\"><button class=\"button gray\">TURN OFF</button></a></p>");
             }
             else
             {
-              client.println("<p><a href=\"/LSR/on\"><button class=\"button button4\">TURN ON</button></a></p>");
+              client.println("<p><a href=\"/LSR/on\"><button class=\"button red\">TURN ON</button></a></p>");
             }
             
             client.println("</body></html>");
