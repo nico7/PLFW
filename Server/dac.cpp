@@ -6,7 +6,11 @@
 
 #include "gpios.h"
 #include "oled.h"
+
 const SPISettings spiSettings(1000000, MSBFIRST, SPI_MODE0);
+
+static uint16_t m_tec_ma;
+static uint16_t m_laser_ma;
 
 static void ll_dac_start(void) 
 {
@@ -51,6 +55,7 @@ void dac_init(void)
  
   ll_dac_start();
   
+  
   buffer[0] = 0x00;
   buffer[1] = 0x00;
   
@@ -67,6 +72,9 @@ void dac_init(void)
   buffer[1] = 0x00;
   dac_write(GAIN_REG, buffer);
   ll_dac_end();
+  
+  m_laser_ma = 0;
+  m_tec_ma  = 0;
 }
 
 void dac_setpoint(uint8_t device, uint8_t *value)
@@ -100,10 +108,12 @@ void dac_set_current(dac_signal_E device, uint16_t mA)
 
   if(device == LASER)
   {
+    m_laser_ma = mA;
     value = (uint8_t) ((mA*256)/LASER_MAX_mA);
   }
   else
   {
+    m_tec_ma = mA;
     value = (uint8_t) ((mA*256)/TEC_MAX_mA);
   }
   
@@ -113,6 +123,19 @@ void dac_set_current(dac_signal_E device, uint16_t mA)
   Serial.print("DAC set at ");
   Serial.println(value);
 
+}
+
+uint16_t dac_get_currentmA(dac_signal_E device)
+{
+  if(device == LASER)
+  {
+    return m_laser_ma;
+  }
+  else if(device == TEC)
+  {
+    return m_tec_ma;
+  }
+  return 0;
 }
 
 

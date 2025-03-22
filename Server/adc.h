@@ -12,6 +12,7 @@ ADC_HTR = 3,
 
 void adc_init(void);
 uint8_t adc_read(adc_signal_E ch, uint16_t * data);
-
+uint16_t adc_get(adc_signal_E ch);
+uint16_t adc_value(adc_signal_E ch);
 
 #endif //__ADC_H_

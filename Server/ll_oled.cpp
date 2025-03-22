@@ -350,3 +350,21 @@ static void ll_oled_init_symbols(void)
   widthMap[0x2E] = PERIOD_WIDTH;
   widthMap[0x3A] = COLON_WIDTH;
 }
+
+void ll_oled_underline(uint8_t line)
+{
+  uint8_t i;
+
+  
+  if(line > 63)
+  {
+    line = 8;
+  }
+
+  for(i=0; i < SCREEN_WIDTH; i++)
+  {
+    myScreen[line][i] = 0x01;
+  }
+
+}
+

@@ -61,6 +61,6 @@ void rasterize(void);
 void ll_oled_display_screen(void);
 void ll_oled_clear(uint8_t reset_locations);
 void ll_oled_print(uint8_t * string, uint16_t size);
-
+void ll_oled_underline(uint8_t line);
 
 #endif //__LL_OLED_H_

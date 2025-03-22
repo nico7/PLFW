@@ -23,15 +23,22 @@ copies or substantial portions of the Software. -->
   </style>
 </head>
 <body>
-  <h2>Laser Station</h2>
-  <div id="chart-temperature" class="container"></div>
-  <div id="chart-humidity" class="container"></div>
-  <div id="chart-pressure" class="container"></div>
+  
+   <div><p>SHUTTER is " + off_on[shutter_state] + "</p></div>
+   <div id="LASER DAC" class="container"></div>
+   <div id="LASER Current" class="container"></div>
+   <div id="TEC DAC" class="container"></div>
+   <div id="TEC Current" class="container"></div>
+   <div id="TEC Temperature" class="container"></div>
+   <div id="Heater Current" class="container"></div>
+
 </body>
 <script>
-var chartT = new Highcharts.Chart({
-  chart:{ renderTo : 'chart-temperature' },
-  title: { text: 'BME280 Temperature' },
+  var sampling_period = 1000;
+  var data_buffer = 100;
+var laserDacChart = new Highcharts.Chart({
+  chart:{ renderTo : 'LASER DAC' },
+  title: { text: 'LASER' },
   series: [{
     showInLegend: false,
     data: []
@@ -46,8 +53,7 @@ var chartT = new Highcharts.Chart({
     dateTimeLabelFormats: { second: '%H:%M:%S' }
   },
   yAxis: {
-    title: { text: 'Temperature (Celsius)' }
-    //title: { text: 'Temperature (Fahrenheit)' }
+    title: { text: 'DAC VALUE' }
   },
   credits: { enabled: false }
 });
@@ -57,21 +63,21 @@ setInterval(function ( ) {
     if (this.readyState == 4 && this.status == 200) {
       var x = (new Date()).getTime(),
           y = parseFloat(this.responseText);
-      //console.log(this.responseText);
-      if(chartT.series[0].data.length > 40) {
-        chartT.series[0].addPoint([x, y], true, true, true);
+      console.log(this.responseText);
+      if(laserDacChart.series[0].data.length > data_buffer) {
+        laserDacChart.series[0].addPoint([x, y], true, true, true);
       } else {
-        chartT.series[0].addPoint([x, y], true, false, true);
+        laserDacChart.series[0].addPoint([x, y], true, false, true);
       }
     }
   };
-  xhttp.open("GET", "/temperature", true);
+  xhttp.open("GET", "/laserdac", true);
   xhttp.send();
-}, 30000 ) ;
+}, sampling_period ) ;
 
-var chartH = new Highcharts.Chart({
-  chart:{ renderTo:'chart-humidity' },
-  title: { text: 'BME280 Humidity' },
+var laserCurrentChart = new Highcharts.Chart({
+  chart:{ renderTo:'LASER Current' },
+  title: { text: 'Laser Current' },
   series: [{
     showInLegend: false,
     data: []
@@ -86,7 +92,7 @@ var chartH = new Highcharts.Chart({
     dateTimeLabelFormats: { second: '%H:%M:%S' }
   },
   yAxis: {
-    title: { text: 'Humidity (%)' }
+    title: { text: 'Laser Current' }
   },
   credits: { enabled: false }
 });
@@ -96,21 +102,21 @@ setInterval(function ( ) {
     if (this.readyState == 4 && this.status == 200) {
       var x = (new Date()).getTime(),
           y = parseFloat(this.responseText);
-      //console.log(this.responseText);
-      if(chartH.series[0].data.length > 40) {
-        chartH.series[0].addPoint([x, y], true, true, true);
+      console.log(this.responseText);
+      if(laserCurrentChart.series[0].data.length > data_buffer) {
+        laserCurrentChart.series[0].addPoint([x, y], true, true, true);
       } else {
-        chartH.series[0].addPoint([x, y], true, false, true);
+        laserCurrentChart.series[0].addPoint([x, y], true, false, true);
       }
     }
   };
-  xhttp.open("GET", "/humidity", true);
+  xhttp.open("GET", "/lasercurrent", true);
   xhttp.send();
-}, 30000 ) ;
+}, sampling_period ) ;
 
-var chartP = new Highcharts.Chart({
-  chart:{ renderTo:'chart-pressure' },
-  title: { text: 'BME280 Pressure' },
+var tecDacChart = new Highcharts.Chart({
+  chart:{ renderTo:'TEC DAC' },
+  title: { text: 'TEC DAC' },
   series: [{
     showInLegend: false,
     data: []
@@ -126,7 +132,7 @@ var chartP = new Highcharts.Chart({
     dateTimeLabelFormats: { second: '%H:%M:%S' }
   },
   yAxis: {
-    title: { text: 'Pressure (hPa)' }
+    title: { text: 'TEC DAC value' }
   },
   credits: { enabled: false }
 });
@@ -136,16 +142,136 @@ setInterval(function ( ) {
     if (this.readyState == 4 && this.status == 200) {
       var x = (new Date()).getTime(),
           y = parseFloat(this.responseText);
-      //console.log(this.responseText);
-      if(chartP.series[0].data.length > 40) {
-        chartP.series[0].addPoint([x, y], true, true, true);
+      console.log(this.responseText);
+      if(tecDacChart.series[0].data.length > data_buffer) {
+        tecDacChart.series[0].addPoint([x, y], true, true, true);
       } else {
-        chartP.series[0].addPoint([x, y], true, false, true);
+        tecDacChart.series[0].addPoint([x, y], true, false, true);
       }
     }
   };
-  xhttp.open("GET", "/pressure", true);
+  xhttp.open("GET", "/tecdac", true);
   xhttp.send();
-}, 30000 ) ;
+}, sampling_period ) ;
+
+var tecCurrentChart = new Highcharts.Chart({
+  chart:{ renderTo:'TEC Current' },
+  title: { text: 'TEC Current' },
+  series: [{
+    showInLegend: false,
+    data: []
+  }],
+  plotOptions: {
+    line: { animation: false,
+      dataLabels: { enabled: true }
+    },
+    series: { color: '#18009c' }
+  },
+  xAxis: {
+    type: 'datetime',
+    dateTimeLabelFormats: { second: '%H:%M:%S' }
+  },
+  yAxis: {
+    title: { text: 'TEC current value' }
+  },
+  credits: { enabled: false }
+});
+setInterval(function ( ) {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      var x = (new Date()).getTime(),
+          y = parseFloat(this.responseText);
+      console.log(this.responseText);
+      if(tecCurrentChart.series[0].data.length > data_buffer) {
+        tecCurrentChart.series[0].addPoint([x, y], true, true, true);
+      } else {
+        tecCurrentChart.series[0].addPoint([x, y], true, false, true);
+      }
+    }
+  };
+  xhttp.open("GET", "/teccurrent", true);
+  xhttp.send();
+}, sampling_period ) ;
+
+var tecTemperatureChart = new Highcharts.Chart({
+  chart:{ renderTo:'TEC Temperature' },
+  title: { text: 'TEC Temperature' },
+  series: [{
+    showInLegend: false,
+    data: []
+  }],
+  plotOptions: {
+    line: { animation: false,
+      dataLabels: { enabled: true }
+    },
+    series: { color: '#18009c' }
+  },
+  xAxis: {
+    type: 'datetime',
+    dateTimeLabelFormats: { second: '%H:%M:%S' }
+  },
+  yAxis: {
+    title: { text: 'TEC temperature value' }
+  },
+  credits: { enabled: false }
+});
+setInterval(function ( ) {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      var x = (new Date()).getTime(),
+          y = parseFloat(this.responseText);
+      console.log(this.responseText);
+      if(tecTemperatureChart.series[0].data.length > data_buffer) {
+        tecTemperatureChart.series[0].addPoint([x, y], true, true, true);
+      } else {
+        tecTemperatureChart.series[0].addPoint([x, y], true, false, true);
+      }
+    }
+  };
+  xhttp.open("GET", "/tectemperature", true);
+  xhttp.send();
+}, sampling_period ) ;
+
+var heaterCurrentChart = new Highcharts.Chart({
+  chart:{ renderTo:'Heater Current' },
+  title: { text: 'Heater Current' },
+  series: [{
+    showInLegend: false,
+    data: []
+  }],
+  plotOptions: {
+    line: { animation: false,
+      dataLabels: { enabled: true }
+    },
+    series: { color: '#18009c' }
+  },
+  xAxis: {
+    type: 'datetime',
+    dateTimeLabelFormats: { second: '%H:%M:%S' }
+  },
+  yAxis: {
+    title: { text: 'Heater Current' }
+  },
+  credits: { enabled: false }
+});
+setInterval(function ( ) {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      var x = (new Date()).getTime(),
+          y = parseFloat(this.responseText);
+      console.log(this.responseText);
+      if(heaterCurrentChart.series[0].data.length > data_buffer) {
+        heaterCurrentChart.series[0].addPoint([x, y], true, true, true);
+      } else {
+        heaterCurrentChart.series[0].addPoint([x, y], true, false, true);
+      }
+    }
+  };
+  xhttp.open("GET", "/htrcurrent", true);
+  xhttp.send();
+}, sampling_period ) ;
 </script>
 </html>

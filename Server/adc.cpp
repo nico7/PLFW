@@ -8,7 +8,12 @@
 #define START_BIT  0x01
 #define SINGLE  0x80
 
-const SPISettings spiSettings(3600000, MSBFIRST, SPI_MODE0);
+const SPISettings spiSettings(3000000, MSBFIRST, SPI_MODE0);
+
+static uint16_t m_laser_adc;
+static uint16_t m_tec_adc;
+static uint16_t m_heater_adc;
+static uint16_t m_thermistor_adc;
 
 static void ll_adc_start(void) 
 {
@@ -47,6 +52,76 @@ uint8_t adc_read(adc_signal_E ch, uint16_t * data)
 
   
   *data = (uint16_t(data_out[0]) <<8) | data_out[1];
-
+  switch(ch)
+  {
+    case ADC_TEC:
+      m_tec_adc          = *data;
+      break;
+    case ADC_LSR:
+      m_laser_adc        = *data; 
+      break;
+    case ADC_THR:
+      m_thermistor_adc   = *data;       
+      break;
+    case ADC_HTR:
+      m_heater_adc       = *data;   
+      break;
+    default:
+      break;
+  }
   return 0;
+}
+
+uint16_t adc_get(adc_signal_E ch)
+{
+  uint16_t retval;
+
+  switch(ch)
+  {
+    case ADC_TEC:
+      adc_read(ADC_TEC, &m_tec_adc);
+      retval = m_tec_adc;
+      break;
+    case ADC_LSR:
+      adc_read(ADC_LSR, &m_laser_adc);
+      retval = m_laser_adc;
+      break;
+    case ADC_THR:
+      adc_read(ADC_THR, &m_thermistor_adc);
+      retval = m_thermistor_adc;
+      break;
+    case ADC_HTR:
+      adc_read(ADC_HTR, &m_heater_adc);
+      retval = m_heater_adc;
+      break;
+    default:
+      retval = 0;
+      break;
+  }
+  return retval;
+}
+
+uint16_t adc_value(adc_signal_E ch)
+{
+  uint16_t retval;
+
+  switch(ch)
+  {
+    case ADC_TEC:
+      retval = m_tec_adc;
+      break;
+    case ADC_LSR:
+      retval = m_laser_adc;
+      break;
+    case ADC_THR:
+      retval = m_thermistor_adc;
+      break;
+    case ADC_HTR:
+      retval = m_heater_adc;
+      break;
+    default:
+      retval = 0;
+      break;
+  }
+  return retval;
 }
