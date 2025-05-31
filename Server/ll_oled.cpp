@@ -277,6 +277,7 @@ static void ll_oled_init_symbols(void)
   letterMap[0x39] = num_9_10;
   letterMap[0x2E] = period_10;
   letterMap[0x3A] = colon_10;
+  letterMap[0x7C] = pipe_10;
   
   widthMap[0x0F] = SELECT_S_WIDTH;  // ☼
   widthMap[0x18] = UP_S_WIDTH;      // ↑
@@ -349,6 +350,7 @@ static void ll_oled_init_symbols(void)
   widthMap[0x39] = NUM_9_WIDTH;
   widthMap[0x2E] = PERIOD_WIDTH;
   widthMap[0x3A] = COLON_WIDTH;
+  widthMap[0x7C] = PIPE_WIDTH;
 }
 
 void ll_oled_underline(uint8_t line)

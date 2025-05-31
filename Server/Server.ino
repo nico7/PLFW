@@ -1,4 +1,5 @@
 //#include "back_end.h"
+// Works with Partition Scheme 8M with spiffs, sent right after programming
 #include "adc.h"
 #include "dac.h"
 #include "gpios.h"
@@ -23,7 +24,7 @@ uint16_t adc_val = 0;
 
 int len;
 char adc_data[50];
-char screen_data[50] = "\n\rSSID: FN530\n\rPW: holograms\n\rIP: 192.168.4.1";
+char screen_data[80] = "\n\rSSID: FN530\n\rPW: holograms\n\rIP: 192.168.4.1\n\r";
 bool wifi_connection = false;
   AsyncWebServer server(80);
 
@@ -156,6 +157,12 @@ void setup()
       server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
         request->send(LittleFS, "/index.html");
       });
+      server.on("/graphs.js", HTTP_GET, [](AsyncWebServerRequest *request){
+        request->send(LittleFS, "/graphs.js", "application/javascript");
+      });
+      server.on("/style.css", HTTP_GET, [](AsyncWebServerRequest *request){
+        request->send(LittleFS, "/style.css", "text/css");
+      });
       server.on("/laserdac", HTTP_GET, [](AsyncWebServerRequest *request){
         request->send_P(200, "text/plain", String(dac_get_currentmA(LASER)).c_str());
       });
@@ -174,6 +181,27 @@ void setup()
       server.on("/htrcurrent", HTTP_GET, [](AsyncWebServerRequest *request){
         request->send_P(200, "text/plain", String(adc_get(ADC_HTR)).c_str());
       });
+      
+      server.serveStatic("/", LittleFS, "/").setDefaultFile("index.html");
+
+      // Handle laser toggle
+      server.on("/toggleLaser", HTTP_GET, [](AsyncWebServerRequest *request){
+        Serial.println("Laser toggle requested");
+        if (request->hasParam("state")) {
+          String state = request->getParam("state")->value();
+          if (state == "on") {
+            laser_enable(true);
+            Serial.println("Laser ON");
+          } else if (state == "off") {
+            laser_enable(false);
+            Serial.println("Laser OFF");
+          }
+          request->send(200, "text/plain", "Laser is " + state);
+        } else {
+          request->send(400, "text/plain", "Missing 'state' parameter");
+        }
+  });
+
  
     server.begin();
     wifi_connection = true;

@@ -23,7 +23,7 @@ static uint8_t main_menu_pos = 0;
 static uint8_t sub_menu_pos = 0;
 static uint8_t sub_sub_menu_pos = 0;
 
-static uint16_t m_update_time = 300;
+static uint16_t m_update_time = 500;
 
 static unsigned long time_prev = 0;
 
@@ -74,7 +74,7 @@ void menu_sm(uint8_t button_pressed)
         break;
       case MENU_VALUES:
         ll_oled_clear(CLEAR_RESET);
-        strcpy(str_helper, "     VALUES\n\r");
+        strcpy(str_helper, "VALUES | MAIN MENU \x0F\n\r");
         oled_title((uint8_t *) str_helper, strlen(str_helper), 9);
         value = adc_value(ADC_LSR);
         sprintf(str_helper, "LSR = %d\n\r", value);

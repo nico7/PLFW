@@ -6,4 +6,5 @@
 
 void oled_print(uint8_t * str, uint16_t size);
 void oled_title(uint8_t * str, uint16_t size, uint8_t underLine);
+
 #endif //__OLED_H_

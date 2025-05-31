@@ -8,7 +8,7 @@
 #define START_BIT  0x01
 #define SINGLE  0x80
 
-const SPISettings spiSettings(3000000, MSBFIRST, SPI_MODE0);
+const SPISettings spiSettings(3600000, MSBFIRST, SPI_MODE0);
 
 static uint16_t m_laser_adc;
 static uint16_t m_tec_adc;
@@ -51,7 +51,7 @@ uint8_t adc_read(adc_signal_E ch, uint16_t * data)
 
 
   
-  *data = (uint16_t(data_out[0]) <<8) | data_out[1];
+  *data = (uint16_t(data_out[0] & 0x03) <<8) | data_out[1];   // Anding with 0x03 because it's the last 10 bits that get meaningful data
   switch(ch)
   {
     case ADC_TEC:

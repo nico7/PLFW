@@ -1079,6 +1079,21 @@ const uint8_t colon_10[10] =
   0x00,
 };
 
+#define PIPE_WIDTH 1
+const uint8_t pipe_10[10] = 
+{
+  0x80,
+  0x80,
+  0x80,
+  0x80,
+  0x80,
+  0x80,
+  0x80,
+  0x80,
+  0x80,
+  0x80,
+};
+
 uint8_t widthMap[256];
 
 const uint8_t * letterMap[256]; 
