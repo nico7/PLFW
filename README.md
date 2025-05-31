@@ -3,9 +3,9 @@
 This is the PL530 driver.
 
 ## TODO
-[] Make website nice
-[] Tune TEC algo
-[] Tune LASER algo
+- [ ] Make website nice
+- [ ] Tune TEC algo
+- [ ] Tune LASER algo
 
 ## Arduino Settings
 - Flash Size: 8MB
