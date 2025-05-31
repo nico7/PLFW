@@ -189,10 +189,13 @@ void setup()
         Serial.println("Laser toggle requested");
         if (request->hasParam("state")) {
           String state = request->getParam("state")->value();
-          if (state == "on") {
+          if (state == "on") 
+          {
             laser_enable(true);
             Serial.println("Laser ON");
-          } else if (state == "off") {
+          } 
+          else if (state == "off") 
+          {
             laser_enable(false);
             Serial.println("Laser OFF");
           }
@@ -200,7 +203,42 @@ void setup()
         } else {
           request->send(400, "text/plain", "Missing 'state' parameter");
         }
-  });
+      });
+
+      server.on("/setLaserCurrent", HTTP_GET, [](AsyncWebServerRequest *request)
+      {
+          if (request->hasParam("value"))
+          {
+              String valStr = request->getParam("value")->value();
+              float floatVal = valStr.toFloat();
+
+              // Clamp value between 0 and 65535 to fit uint16_t
+              if (floatVal < 0)
+              {
+                  floatVal = 0;
+              }
+              if (floatVal > 65535)
+              {
+                  floatVal = 65535;
+              }
+
+              uint16_t current = (uint16_t)floatVal;
+
+              // Use your function to set laser current
+              dac_set_current(LASER, current);
+
+              Serial.printf("Laser current set to: %u mA\n", current);
+
+              request->send(200, "text/plain", "Laser current set to " + String(current) + " mA");
+          }
+          else
+          {
+              request->send(400, "text/plain", "Missing 'value' parameter");
+          }
+      });
+
+
+
 
  
     server.begin();

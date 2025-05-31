@@ -2,6 +2,9 @@
 
 This is the PL530 driver.
 
+## NOTE!
+- Uploading LittleFS is a race condition, therefore must be done as soon as the ESP32 comes out of reset
+
 ## TODO
 - [ ] Make website nice
 - [ ] Tune TEC algo

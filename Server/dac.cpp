@@ -108,13 +108,29 @@ void dac_set_current(dac_signal_E device, uint16_t mA)
 
   if(device == LASER)
   {
-    m_laser_ma = mA;
-    value = (uint8_t) ((mA*256)/LASER_MAX_mA);
+    if(mA > LASER_MAX_mA)
+    {
+      m_laser_ma = 0;
+    }
+    else
+    {
+      m_laser_ma = mA;
+    }
+
+    value = (uint8_t) ((mA*256)/LASER_MAX_mA + 1);
   }
   else
   {
-    m_tec_ma = mA;
-    value = (uint8_t) ((mA*256)/TEC_MAX_mA);
+    if(mA > TEC_MAX_mA)
+    {
+      m_tec_ma = 0;
+    }
+    else
+    {
+      m_tec_ma = mA;
+    }
+    
+    value = (uint8_t) ((mA*256)/TEC_MAX_mA + 1);
   }
   
   val_buffer[0] = 0x00;

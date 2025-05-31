@@ -56,9 +56,9 @@ xhttp.onreadystatechange = function() {
         y = parseFloat(this.responseText);
     //console.log(this.responseText);
     if(laserDacChart.series[0].data.length > data_buffer) {
-      laserDacChart.series[0].addPoint([x, y], true, true, true);
+      laserDacChart.series[0].addPoint([x, y], true, true, false);
     } else {
-      laserDacChart.series[0].addPoint([x, y], true, false, true);
+      laserDacChart.series[0].addPoint([x, y], true, false, false);
     }
   }
 };
@@ -118,9 +118,9 @@ xhttp.onreadystatechange = function() {
         y = parseFloat(this.responseText);
     //console.log(this.responseText);
     if(laserCurrentChart.series[0].data.length > data_buffer) {
-      laserCurrentChart.series[0].addPoint([x, y], true, true, true);
+      laserCurrentChart.series[0].addPoint([x, y], true, true, false);
     } else {
-      laserCurrentChart.series[0].addPoint([x, y], true, false, true);
+      laserCurrentChart.series[0].addPoint([x, y], true, false, false);
     }
   }
 };
@@ -180,9 +180,9 @@ xhttp.onreadystatechange = function() {
         y = parseFloat(this.responseText);
     //console.log(this.responseText);
     if(tecDacChart.series[0].data.length > data_buffer) {
-      tecDacChart.series[0].addPoint([x, y], true, true, true);
+      tecDacChart.series[0].addPoint([x, y], true, true, false);
     } else {
-      tecDacChart.series[0].addPoint([x, y], true, false, true);
+      tecDacChart.series[0].addPoint([x, y], true, false, false);
     }
   }
 };
@@ -242,9 +242,9 @@ xhttp.onreadystatechange = function() {
         y = parseFloat(this.responseText);
     //console.log(this.responseText);
     if(tecCurrentChart.series[0].data.length > data_buffer) {
-      tecCurrentChart.series[0].addPoint([x, y], true, true, true);
+      tecCurrentChart.series[0].addPoint([x, y], true, true, false);
     } else {
-      tecCurrentChart.series[0].addPoint([x, y], true, false, true);
+      tecCurrentChart.series[0].addPoint([x, y], true, false, false);
     }
   }
 };
@@ -304,9 +304,9 @@ xhttp.onreadystatechange = function() {
         y = parseFloat(this.responseText);
     //console.log(this.responseText);
     if(tecTemperatureChart.series[0].data.length > data_buffer) {
-      tecTemperatureChart.series[0].addPoint([x, y], true, true, true);
+      tecTemperatureChart.series[0].addPoint([x, y], true, true, false);
     } else {
-      tecTemperatureChart.series[0].addPoint([x, y], true, false, true);
+      tecTemperatureChart.series[0].addPoint([x, y], true, false, false);
     }
   }
 };
@@ -366,9 +366,9 @@ xhttp.onreadystatechange = function() {
         y = parseFloat(this.responseText);
     //console.log(this.responseText);
     if(heaterCurrentChart.series[0].data.length > data_buffer) {
-      heaterCurrentChart.series[0].addPoint([x, y], true, true, true);
+      heaterCurrentChart.series[0].addPoint([x, y], true, true, false);
     } else {
-      heaterCurrentChart.series[0].addPoint([x, y], true, false, true);
+      heaterCurrentChart.series[0].addPoint([x, y], true, false, false);
     }
   }
 };
@@ -395,4 +395,33 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
   
+  document.addEventListener("DOMContentLoaded", () => {
+    const sendButton = document.getElementById("sendLaserValuesButton");
+    const inputField = document.getElementById("laserCurrentValue");
+  
+    sendButton.addEventListener("click", () => {
+      const value = inputField.value;
+  
+      if (value === "") {
+        alert("Please enter a value.");
+        return;
+      }
+  
+      const numValue = parseFloat(value);
+      if (isNaN(numValue) || numValue < 0 || numValue > 500) {
+        alert("Please enter a valid number between 0 and 500.");
+        return;
+      }
+  
+      fetch(`/setLaserCurrent?value=${numValue}`)
+        .then(res => res.text())
+        .then(msg => {
+          console.log("ESP32 Response:", msg);
+        })
+        .catch(err => {
+          console.error("Error sending value to ESP32:", err);
+          alert("Failed to send value.");
+        });
+    });
+  });
   
