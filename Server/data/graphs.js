@@ -72,7 +72,7 @@ chart:{
     backgroundColor: '#4A4A4A'
 },
 title: {
-    text: 'Laser Current',
+    text: 'Laser Current (mA)',
     style: {
         color: '#FFFFFF'
     } },
@@ -425,3 +425,34 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
   
+  function updateLED(status) 
+{
+    const led = document.getElementById("led");
+
+    if (status === 1) 
+    {
+        led.classList.remove("off");
+        led.classList.add("on");
+    } 
+    else 
+    {
+        led.classList.remove("on");
+        led.classList.add("off");
+    }
+}
+
+// Poll the ESP32 every second for LED status
+setInterval(() => 
+{
+    fetch("/laserFault")
+        .then(response => response.text())
+        .then(data => 
+        {
+            const status = parseInt(data.trim());
+            updateLED(status);
+        })
+        .catch(error => 
+        {
+            console.error("Error fetching LED status:", error);
+        });
+}, 1000);

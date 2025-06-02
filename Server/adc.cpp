@@ -32,9 +32,9 @@ static void ll_adc_end(void)
 uint8_t adc_read(adc_signal_E ch, uint16_t * data)
 {
   uint8_t buffer[3] = {0,0,0};
-  uint8_t data_out[2] = {0,0};
+  uint8_t data_out[3] = {0,0,0};
 
-  if(ch > 3)  // if the channel specified is greater than 3, then it does NOT exist
+  if(ch != 1)  // if the channel specified is greater than 3, then it does NOT exist
   {
     return 0xFF;    // so don't even try.
   }
@@ -44,14 +44,15 @@ uint8_t adc_read(adc_signal_E ch, uint16_t * data)
   
   ll_adc_start();
   data_out[0] = SPI.transfer(buffer[0]);
-  data_out[0] = SPI.transfer(buffer[1]);
-  data_out[1] = SPI.transfer(buffer[2]);
+  data_out[1] = SPI.transfer(buffer[1]);
+  data_out[2] = SPI.transfer(buffer[2]);
 
   ll_adc_end();
 
-
+ 
   
-  *data = (uint16_t(data_out[0] & 0x03) <<8) | data_out[1];   // Anding with 0x03 because it's the last 10 bits that get meaningful data
+  *data = (uint16_t(data_out[1] & 0x03) <<8) | data_out[2];   // Anding with 0x03 because it's the last 10 bits that get meaningful data
+
   switch(ch)
   {
     case ADC_TEC:
@@ -84,6 +85,7 @@ uint16_t adc_get(adc_signal_E ch)
       break;
     case ADC_LSR:
       adc_read(ADC_LSR, &m_laser_adc);
+      m_laser_adc = (uint16_t) (((((double) m_laser_adc) * 330000.0 /1023.0))/(LASER_SENS_RES));
       retval = m_laser_adc;
       break;
     case ADC_THR:
@@ -98,6 +100,7 @@ uint16_t adc_get(adc_signal_E ch)
       retval = 0;
       break;
   }
+  
   return retval;
 }
 

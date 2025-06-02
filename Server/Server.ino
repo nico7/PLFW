@@ -237,7 +237,21 @@ void setup()
           }
       });
 
+      server.on("/laserFault", HTTP_GET, [](AsyncWebServerRequest *request)
+      {
+        int ledState;
 
+        if(laser_is_enabled())
+        {
+          ledState = !digitalRead(L_N_FAULT); // or your actual status logic
+        }
+        else
+        {
+          ledState = 0;
+        }
+
+        request->send(200, "text/plain", String(ledState));
+      });
 
 
  

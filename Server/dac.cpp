@@ -101,7 +101,7 @@ void dac_setpoint(uint8_t device, uint8_t *value)
 
 }
 
-void dac_set_current(dac_signal_E device, uint16_t mA)
+void dac_set_current(dac_signal_E device, uint32_t mA)
 {
   uint8_t val_buffer[2];
   uint8_t value;
@@ -117,7 +117,7 @@ void dac_set_current(dac_signal_E device, uint16_t mA)
       m_laser_ma = mA;
     }
 
-    value = (uint8_t) ((mA*256)/LASER_MAX_mA + 1);
+    value = (uint8_t) ((mA*255)/LASER_MAX_mA);
   }
   else
   {
@@ -130,7 +130,7 @@ void dac_set_current(dac_signal_E device, uint16_t mA)
       m_tec_ma = mA;
     }
     
-    value = (uint8_t) ((mA*256)/TEC_MAX_mA + 1);
+    value = (uint8_t) ((mA*255)/TEC_MAX_mA);
   }
   
   val_buffer[0] = 0x00;

@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+#define LASER_SENS_RES 210 //mOhms
+
 typedef enum adc_signal {
 ADC_TEC = 0,
 ADC_LSR = 1,
