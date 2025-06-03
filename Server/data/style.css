@@ -8,7 +8,6 @@ body {
   background-color: #121212;
   color: #ffffff;
   min-width: 310px;
-  max-width: 800px;
   height: 400px;
   margin: 0 auto;
 }
@@ -130,6 +129,26 @@ label {
   padding: 5%;
 }
 
+
+.control-grid {
+  display: grid;
+  grid-template-columns: repeat(5, auto);
+  gap: 20px;
+  margin-top: 8px;
+  align-items: start;
+}
+
+.grid-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.control-grid label {
+  color: white;
+  margin-bottom: 5px;
+}
+
 .input-group {
   margin: 20px 0;
   font-family: sans-serif;
@@ -176,8 +195,7 @@ label {
 }
 
 .led-label {
-  font-weight: bold;
-  color: #333;
+  color: #FFFF;
   font-size: 1em;
 }
 
@@ -205,6 +223,22 @@ label {
   color: #1282A2;
 }
 
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+  color: white;
+}
+
+.sendLaserValuesButton {
+  margin: 2%;
+}
 
 /* Slider */
 .slider {

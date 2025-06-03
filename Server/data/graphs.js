@@ -425,34 +425,63 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
   
-  function updateLED(status) 
-{
-    const led = document.getElementById("led");
-
-    if (status === 1) 
-    {
-        led.classList.remove("off");
-        led.classList.add("on");
-    } 
-    else 
-    {
-        led.classList.remove("on");
-        led.classList.add("off");
-    }
-}
-
-// Poll the ESP32 every second for LED status
-setInterval(() => 
-{
-    fetch("/laserFault")
-        .then(response => response.text())
-        .then(data => 
-        {
-            const status = parseInt(data.trim());
-            updateLED(status);
-        })
-        .catch(error => 
-        {
-            console.error("Error fetching LED status:", error);
-        });
-}, 1000);
+  function updateLaserFaultLED(status) 
+  {
+      const laserFaultLED = document.getElementById("laser_fault_led");
+  
+      if (status === 1) 
+      {
+          laserFaultLED.classList.remove("off");
+          laserFaultLED.classList.add("on");
+      } 
+      else 
+      {
+          laserFaultLED.classList.remove("on");
+          laserFaultLED.classList.add("off");
+      }
+  }
+  
+  function updateLaserOnLED(status) 
+  {
+      const laserOnLED = document.getElementById("laser_on_led");
+  
+      if (status === 1) 
+      {
+          laserOnLED.classList.remove("off");
+          laserOnLED.classList.add("on");
+      } 
+      else 
+      {
+          laserOnLED.classList.remove("on");
+          laserOnLED.classList.add("off");
+      }
+  }
+  
+  // Poll every second
+  setInterval(() => 
+  {
+      fetch("/laserFault")
+          .then(response => response.text())
+          .then(data => 
+          {
+              const status = parseInt(data.trim());
+              updateLaserFaultLED(status);
+          })
+          .catch(error => 
+          {
+              console.error("Error fetching laser fault status:", error);
+          });
+  
+      fetch("/laserOn")
+          .then(response => response.text())
+          .then(data => 
+          {
+              const status = parseInt(data.trim());
+              updateLaserOnLED(status);
+          })
+          .catch(error => 
+          {
+              console.error("Error fetching laser on status:", error);
+          });
+  
+  }, 1000);

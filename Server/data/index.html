@@ -1,48 +1,64 @@
-<!DOCTYPE HTML><html>
-<!-- Rui Santos - Complete project details at https://RandomNerdTutorials.com
+<!DOCTYPE HTML>
+<html>
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files.
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software. -->
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="https://code.highcharts.com/highcharts.js"></script>
   <link rel="stylesheet" href="/style.css">
 </head>
+
 <body>
-  
+
   <div style="margin-bottom: 20px;" class="container">
-    <label style="color: white; font-weight: bold;">LASER</label>
-    <div style="display: flex; align-items: center; gap: 15px; margin-top: 8px;">
-      
-      <!-- Toggle switch -->
-      <label style="display: flex; align-items: center; gap: 5px; color: white;">
-        ON/OFF
+    <label style="color: white; font-weight: bold; margin-bottom: 10px">LASER</label>
+
+    <div class="control-grid">
+      <!-- ON/OFF Switch -->
+      <div class="grid-item">
+        <label for="laserToggle">ON/OFF</label>
         <label class="switch">
           <input type="checkbox" id="laserToggle">
           <span class="slider round"></span>
         </label>
-      </label>
+      </div>
 
+      <!-- Laser Fault LED -->
       <div class="led-container">
-        <label for="led" class="led-label">Fault</label>
-        <div id="led" class="led off"></div>
+        <label for="laser_fault_led" class="led-label">Fault</label>
+        <div id="laser_fault_led" class="led off"></div>
       </div>
-  
-      <!-- Input field and send button -->
-      <div style="display: flex; align-items: center; gap: 10px;">
-        <div style="display: flex; flex-direction: column;">
-          <label for="laserCurrentValue" style="color: white;">Laser Current (mA)</label>
-          <input type="number" id="laserCurrentValue" step="1" min="0" style="width: 100px;">
-        </div>
-        <button id="sendLaserValuesButton" style="background-color: #e74c3c">Send</button>
+
+      <!-- Laser On LED -->
+      <div class="led-container">
+        <label for="laser_on_led" class="led-label">ON/OFF</label>
+        <div id="laser_on_led" class="led off"></div>
       </div>
-  
+
+      <!-- Laser Current Input -->
+      <div class="grid-item">
+        <label for="laserCurrentValue">Laser Current (mA)</label>
+        <input type="number" id="laserCurrentValue" step="1" min="0" style="width: 100%;">
+      </div>
+
+      <!-- Send Button -->
+      <div class="grid-item">
+        <label style="visibility: hidden;">Send</label>
+        <button id="sendLaserValuesButton" style="background-color: #e74c3c; width: 100%;">Send</button>
+      </div>
+
+      
+      <!-- Show Graph Button -->
+      <!-- <div class="grid-item">
+        <label style="visibility: hidden;">Show graph</label>
+        <button id="showLaserGraphButton" style="background-color: #3498db; color: white; padding: 6px 12px; border: none; border-radius: 4px;">
+          Show Graph
+        </button>
+      </div> -->
     </div>
   </div>
-
-  </div>
+  
+  
+  
   <div id="LASER DAC" class="container"></div>
   <div id="LASER Current" class="container"></div>
   <div id="TEC DAC" class="container"></div>
@@ -50,6 +66,7 @@ copies or substantial portions of the Software. -->
   <div id="TEC Temperature" class="container"></div>
   <div id="Heater Current" class="container"></div>
 
-  </body>
-  <script src="graphs.js"></script>
+</body>
+<script src="graphs.js"></script>
+
 </html>

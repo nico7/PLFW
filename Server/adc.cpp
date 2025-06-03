@@ -34,7 +34,7 @@ uint8_t adc_read(adc_signal_E ch, uint16_t * data)
   uint8_t buffer[3] = {0,0,0};
   uint8_t data_out[3] = {0,0,0};
 
-  if(ch != 1)  // if the channel specified is greater than 3, then it does NOT exist
+  if(ch >3 )  // if the channel specified is greater than 3, then it does NOT exist
   {
     return 0xFF;    // so don't even try.
   }
