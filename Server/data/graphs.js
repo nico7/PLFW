@@ -1,132 +1,132 @@
 var sampling_period = 100;
 var data_buffer = 100;
-var laserDacChart = new Highcharts.Chart({
-chart:{ 
-    renderTo : 'LASER DAC',
-    backgroundColor: '#4A4A4A'
-},
-title: {
-    text: 'LASER',
-    style: {
-        color: '#FFFFFF'
-      }
- },
-series: [{
-  showInLegend: false,
-  data: []
-}],
-plotOptions: {
-  line: { animation: false,
-    dataLabels: { enabled: false }
-  },
-  series: { color: '#00d78c' },
-  style: {
-    color: '#FFFFFF'
-  }
-},
-xAxis: { 
-    labels: {
-        style: {
-        color: '#FFFFFF'
-        }
-    },
-    type: 'datetime',
-    dateTimeLabelFormats: { second: '%S' },
-},
-yAxis: {
-    labels: {
-        style: {
-          color: '#FFFFFF'
-        }
-    },
-    title: {
-        text: 'DAC VALUE',
-        style: {
-            color: '#FFFFFF'
-        }
-    },
-},
-credits: { enabled: false }
-});
-setInterval(function ( ) {
-var xhttp = new XMLHttpRequest();
-xhttp.onreadystatechange = function() {
-  if (this.readyState == 4 && this.status == 200) {
-    var x = (new Date()).getTime(),
-        y = parseFloat(this.responseText);
-    //console.log(this.responseText);
-    if(laserDacChart.series[0].data.length > data_buffer) {
-      laserDacChart.series[0].addPoint([x, y], true, true, false);
-    } else {
-      laserDacChart.series[0].addPoint([x, y], true, false, false);
-    }
-  }
-};
-xhttp.open("GET", "/laserdac", true);
-xhttp.send();
-}, sampling_period ) ;
+// var laserDacChart = new Highcharts.Chart({
+// chart:{ 
+//     renderTo : 'LASER DAC',
+//     backgroundColor: '#4A4A4A'
+// },
+// title: {
+//     text: 'LASER',
+//     style: {
+//         color: '#FFFFFF'
+//       }
+//  },
+// series: [{
+//   showInLegend: false,
+//   data: []
+// }],
+// plotOptions: {
+//   line: { animation: false,
+//     dataLabels: { enabled: false }
+//   },
+//   series: { color: '#00d78c' },
+//   style: {
+//     color: '#FFFFFF'
+//   }
+// },
+// xAxis: { 
+//     labels: {
+//         style: {
+//         color: '#FFFFFF'
+//         }
+//     },
+//     type: 'datetime',
+//     dateTimeLabelFormats: { second: '%S' },
+// },
+// yAxis: {
+//     labels: {
+//         style: {
+//           color: '#FFFFFF'
+//         }
+//     },
+//     title: {
+//         text: 'DAC VALUE',
+//         style: {
+//             color: '#FFFFFF'
+//         }
+//     },
+// },
+// credits: { enabled: false }
+// });
+// setInterval(function ( ) {
+// var xhttp = new XMLHttpRequest();
+// xhttp.onreadystatechange = function() {
+//   if (this.readyState == 4 && this.status == 200) {
+//     var x = (new Date()).getTime(),
+//         y = parseFloat(this.responseText);
+//     //console.log(this.responseText);
+//     if(laserDacChart.series[0].data.length > data_buffer) {
+//       laserDacChart.series[0].addPoint([x, y], true, true, false);
+//     } else {
+//       laserDacChart.series[0].addPoint([x, y], true, false, false);
+//     }
+//   }
+// };
+// xhttp.open("GET", "/laserdac", true);
+// xhttp.send();
+// }, sampling_period ) ;
 
-var laserCurrentChart = new Highcharts.Chart({
-chart:{ 
-    renderTo:'LASER Current',
-    backgroundColor: '#4A4A4A'
-},
-title: {
-    text: 'Laser Current',
-    style: {
-        color: '#FFFFFF'
-    } },
-series: [{
-  showInLegend: false,
-  data: []
-}],
-plotOptions: {
-  line: { animation: false,
-    dataLabels: { enabled: false }
-  },
-  series: {color: '#D1122E'}
-},
-xAxis: {
-    labels: {
-        style: {
-          color: '#FFFFFF'
-        }
-    },
-  type: 'datetime',
-  dateTimeLabelFormats: { second: '%S' }
-},
-yAxis: {
-    labels: {
-        style: {
-          color: '#FFFFFF'
-        }
-      },
-    title: {
-        text: '(mA)',
-        style: {
-            color: '#FFFFFF'
-        }
-    }
-},
-credits: { enabled: false }
-});
-setInterval(function ( ) {
-var xhttp = new XMLHttpRequest();
-xhttp.onreadystatechange = function() {
-  if (this.readyState == 4 && this.status == 200) {
-    var x = (new Date()).getTime(),
-        y = parseFloat(this.responseText);
-    //console.log(this.responseText);
-    if(laserCurrentChart.series[0].data.length > data_buffer) {
-      laserCurrentChart.series[0].addPoint([x, y], true, true, false);
-    } else {
-      laserCurrentChart.series[0].addPoint([x, y], true, false, false);
-    }
-  }
-};
-xhttp.open("GET", "/lasercurrent", true);
-xhttp.send();
-}, sampling_period ) ;
+// var laserCurrentChart = new Highcharts.Chart({
+// chart:{ 
+//     renderTo:'LASER Current',
+//     backgroundColor: '#4A4A4A'
+// },
+// title: {
+//     text: 'Laser Current',
+//     style: {
+//         color: '#FFFFFF'
+//     } },
+// series: [{
+//   showInLegend: false,
+//   data: []
+// }],
+// plotOptions: {
+//   line: { animation: false,
+//     dataLabels: { enabled: false }
+//   },
+//   series: {color: '#D1122E'}
+// },
+// xAxis: {
+//     labels: {
+//         style: {
+//           color: '#FFFFFF'
+//         }
+//     },
+//   type: 'datetime',
+//   dateTimeLabelFormats: { second: '%S' }
+// },
+// yAxis: {
+//     labels: {
+//         style: {
+//           color: '#FFFFFF'
+//         }
+//       },
+//     title: {
+//         text: '(mA)',
+//         style: {
+//             color: '#FFFFFF'
+//         }
+//     }
+// },
+// credits: { enabled: false }
+// });
+// setInterval(function ( ) {
+// var xhttp = new XMLHttpRequest();
+// xhttp.onreadystatechange = function() {
+//   if (this.readyState == 4 && this.status == 200) {
+//     var x = (new Date()).getTime(),
+//         y = parseFloat(this.responseText);
+//     //console.log(this.responseText);
+//     if(laserCurrentChart.series[0].data.length > data_buffer) {
+//       laserCurrentChart.series[0].addPoint([x, y], true, true, false);
+//     } else {
+//       laserCurrentChart.series[0].addPoint([x, y], true, false, false);
+//     }
+//   }
+// };
+// xhttp.open("GET", "/lasercurrent", true);
+// xhttp.send();
+// }, sampling_period ) ;
 
 var tecDacChart = new Highcharts.Chart({
 chart:{ 
@@ -485,3 +485,7 @@ document.addEventListener("DOMContentLoaded", () => {
           });
   
   }, 1000);
+
+  document.getElementById("showLaserGraphButton").addEventListener("click", function () {
+    window.open("/laser-graph.html", "_blank", "width=900,height=700");
+  });

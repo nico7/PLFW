@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Laser DAC Graph</title>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <link rel="stylesheet" href="/style.css">
+
+</head>
+
+<body>
+    <h2>Laser DAC</h2>
+    <div id="LASER DAC" class="container"></div>
+
+    <script>
+        var sampling_period = 100;
+        var data_buffer = 100;
+        var laserDacChart = new Highcharts.Chart({
+            chart: {
+                renderTo: 'LASER DAC',
+                backgroundColor: '#4A4A4A'
+            },
+            title: {
+                text: 'LASER',
+                style: {
+                    color: '#FFFFFF'
+                }
+            },
+            series: [{
+                showInLegend: false,
+                data: []
+            }],
+            plotOptions: {
+                line: {
+                    animation: false,
+                    dataLabels: { enabled: false }
+                },
+                series: { color: '#00d78c' },
+                style: {
+                    color: '#FFFFFF'
+                }
+            },
+            xAxis: {
+                labels: {
+                    style: {
+                        color: '#FFFFFF'
+                    }
+                },
+                type: 'datetime',
+                dateTimeLabelFormats: { second: '%S' },
+            },
+            yAxis: {
+                labels: {
+                    style: {
+                        color: '#FFFFFF'
+                    }
+                },
+                title: {
+                    text: 'DAC VALUE',
+                    style: {
+                        color: '#FFFFFF'
+                    }
+                },
+            },
+            credits: { enabled: false }
+        });
+        setInterval(function () {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    var x = (new Date()).getTime(),
+                        y = parseFloat(this.responseText);
+                    //console.log(this.responseText);
+                    if (laserDacChart.series[0].data.length > data_buffer) {
+                        laserDacChart.series[0].addPoint([x, y], true, true, false);
+                    } else {
+                        laserDacChart.series[0].addPoint([x, y], true, false, false);
+                    }
+                }
+            };
+            xhttp.open("GET", "/laserdac", true);
+            xhttp.send();
+        }, sampling_period);
+    </script>
+
+</body>
+
+</html>

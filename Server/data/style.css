@@ -132,7 +132,7 @@ label {
 
 .control-grid {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 2fr 2fr 6fr;
+  grid-template-columns: 1fr 1fr 1fr 2fr 2fr 2fr;
   gap: 20px;
   margin-top: 8px;
   align-items: start;

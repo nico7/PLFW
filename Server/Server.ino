@@ -164,10 +164,10 @@ void setup()
         request->send(LittleFS, "/style.css", "text/css");
       });
 
-      // // Serve laser-graph.html explicitly if needed
-      // server.on("/laser-graph.html", HTTP_GET, [](AsyncWebServerRequest *request) {
-      //   request->send(LittleFS, "/laser-graph.html", "text/html");
-      // });
+      // Serve laser-graph.html explicitly if needed
+      server.on("/laser-graph.html", HTTP_GET, [](AsyncWebServerRequest *request) {
+        request->send(LittleFS, "/laser-graph.html", "text/html");
+      });
       server.on("/laserdac", HTTP_GET, [](AsyncWebServerRequest *request){
         request->send_P(200, "text/plain", String(dac_get_currentmA(LASER)).c_str());
       });
