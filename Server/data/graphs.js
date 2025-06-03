@@ -72,7 +72,7 @@ chart:{
     backgroundColor: '#4A4A4A'
 },
 title: {
-    text: 'Laser Current (mA)',
+    text: 'Laser Current',
     style: {
         color: '#FFFFFF'
     } },
@@ -102,7 +102,7 @@ yAxis: {
         }
       },
     title: {
-        text: 'Laser Current',
+        text: '(mA)',
         style: {
             color: '#FFFFFF'
         }
@@ -350,7 +350,7 @@ yAxis: {
         }
     },
     title: {
-        text: 'Heater Current',
+        text: 'mA',
         style: {
             color: '#FFFFFF'
         }

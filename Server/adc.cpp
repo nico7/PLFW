@@ -85,7 +85,7 @@ uint16_t adc_get(adc_signal_E ch)
       break;
     case ADC_LSR:
       adc_read(ADC_LSR, &m_laser_adc);
-      m_laser_adc = (uint16_t) (((((double) m_laser_adc) * 330000.0 /1023.0))/(LASER_SENS_RES));
+      m_laser_adc = (uint16_t) (((((double) m_laser_adc) * 330000.0 / 1023.0))/(LASER_SENS_RES));
       retval = m_laser_adc;
       break;
     case ADC_THR:
@@ -94,6 +94,7 @@ uint16_t adc_get(adc_signal_E ch)
       break;
     case ADC_HTR:
       adc_read(ADC_HTR, &m_heater_adc);
+      m_heater_adc = (uint16_t) ((3300.0 - ((double) m_heater_adc * 3300.0 / 1023.0)) / 2.5);
       retval = m_heater_adc;
       break;
     default:
