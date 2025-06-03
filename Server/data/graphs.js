@@ -270,7 +270,7 @@ plotOptions: {
   line: { animation: false,
     dataLabels: { enabled: false }
   },
-  series: { color: '#18009c' }
+  series: { color: '#f6a82e' }
 },
 xAxis: {
     labels: {
@@ -332,7 +332,7 @@ plotOptions: {
   line: { animation: false,
     dataLabels: { enabled: false }
   },
-  series: { color: '#18009c' }
+  series: { color: '#D1122E' }
 },
 xAxis: {
     labels: {
