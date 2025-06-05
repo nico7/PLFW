@@ -32,5 +32,6 @@ void dac_write(uint8_t cmd, uint8_t * data);
 void dac_setpoint(uint8_t device, uint8_t *value);
 void dac_set_current(dac_signal_E device, uint32_t mA);
 uint16_t dac_get_currentmA(dac_signal_E device);
+uint16_t dac_get_setpoint(uint8_t device);
 
 #endif // __DAC_H_

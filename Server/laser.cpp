@@ -4,7 +4,7 @@
 #include "gpios.h"
 #include "dac.h"
 
-static bool m_laser_enabled;
+static bool m_laser_enabled = false;
 
 void laser_init(void)
 {

@@ -9,8 +9,9 @@
 </head>
 
 <body>
-    <h2>Laser DAC</h2>
+    <h2>Laser DAC6</h2>
     <div id="LASER DAC" class="container"></div>
+    <div id="LASER Current" class="container"></div>
 
     <script>
         var sampling_period = 100;
@@ -81,6 +82,69 @@
             xhttp.open("GET", "/laserdac", true);
             xhttp.send();
         }, sampling_period);
+
+        var laserCurrentChart = new Highcharts.Chart({
+            chart:{ 
+                renderTo:'LASER Current',
+                backgroundColor: '#4A4A4A'
+            },
+            title: {
+                text: 'Laser Current',
+                style: {
+                    color: '#FFFFFF'
+                } },
+            series: [{
+              showInLegend: false,
+              data: []
+            }],
+            plotOptions: {
+              line: { animation: false,
+                dataLabels: { enabled: false }
+              },
+              series: {color: '#D1122E'}
+            },
+            xAxis: {
+                labels: {
+                    style: {
+                      color: '#FFFFFF'
+                    }
+                },
+              type: 'datetime',
+              dateTimeLabelFormats: { second: '%S' }
+            },
+            yAxis: {
+                labels: {
+                    style: {
+                      color: '#FFFFFF'
+                    }
+                  },
+                title: {
+                    text: '(mA)',
+                    style: {
+                        color: '#FFFFFF'
+                    }
+                }
+            },
+            credits: { enabled: false }
+            });
+            setInterval(function ( ) {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+              if (this.readyState == 4 && this.status == 200) {
+                var x = (new Date()).getTime(),
+                    y = parseFloat(this.responseText);
+                //console.log(this.responseText);
+                if(laserCurrentChart.series[0].data.length > data_buffer) {
+                  laserCurrentChart.series[0].addPoint([x, y], true, true, false);
+                } else {
+                  laserCurrentChart.series[0].addPoint([x, y], true, false, false);
+                }
+              }
+            };
+        xhttp.open("GET", "/lasercurrent", true);
+        xhttp.send();
+        }, sampling_period ) ;
+
     </script>
 
 </body>

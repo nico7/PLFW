@@ -66,426 +66,462 @@ var data_buffer = 100;
 // xhttp.send();
 // }, sampling_period ) ;
 
-// var laserCurrentChart = new Highcharts.Chart({
-// chart:{ 
-//     renderTo:'LASER Current',
-//     backgroundColor: '#4A4A4A'
-// },
-// title: {
-//     text: 'Laser Current',
-//     style: {
-//         color: '#FFFFFF'
-//     } },
-// series: [{
-//   showInLegend: false,
-//   data: []
-// }],
-// plotOptions: {
-//   line: { animation: false,
-//     dataLabels: { enabled: false }
-//   },
-//   series: {color: '#D1122E'}
-// },
-// xAxis: {
-//     labels: {
-//         style: {
-//           color: '#FFFFFF'
-//         }
-//     },
-//   type: 'datetime',
-//   dateTimeLabelFormats: { second: '%S' }
-// },
-// yAxis: {
-//     labels: {
-//         style: {
-//           color: '#FFFFFF'
-//         }
-//       },
-//     title: {
-//         text: '(mA)',
-//         style: {
-//             color: '#FFFFFF'
-//         }
-//     }
-// },
-// credits: { enabled: false }
-// });
-// setInterval(function ( ) {
-// var xhttp = new XMLHttpRequest();
-// xhttp.onreadystatechange = function() {
-//   if (this.readyState == 4 && this.status == 200) {
-//     var x = (new Date()).getTime(),
-//         y = parseFloat(this.responseText);
-//     //console.log(this.responseText);
-//     if(laserCurrentChart.series[0].data.length > data_buffer) {
-//       laserCurrentChart.series[0].addPoint([x, y], true, true, false);
-//     } else {
-//       laserCurrentChart.series[0].addPoint([x, y], true, false, false);
-//     }
-//   }
-// };
-// xhttp.open("GET", "/lasercurrent", true);
-// xhttp.send();
-// }, sampling_period ) ;
 
 var tecDacChart = new Highcharts.Chart({
-chart:{ 
-    renderTo:'TEC DAC',
-    backgroundColor: '#4A4A4A' 
-},
-title: {
+  chart: {
+    renderTo: 'TEC DAC',
+    backgroundColor: '#4A4A4A'
+  },
+  title: {
     text: 'TEC DAC',
     style: {
-        color: '#FFFFFF'
-    }},
-series: [{
-  showInLegend: false,
-  data: []
-}],
-plotOptions: {
-  line: { animation: false,
-    dataLabels: { enabled: false }
+      color: '#FFFFFF'
+    }
   },
-  series: { color: '#18009c' }
-},
-xAxis: {
+  series: [{
+    showInLegend: false,
+    data: []
+  }],
+  plotOptions: {
+    line: {
+      animation: false,
+      dataLabels: { enabled: false }
+    },
+    series: { color: '#18009c' }
+  },
+  xAxis: {
     labels: {
-        style: {
-          color: '#FFFFFF'
-        }
+      style: {
+        color: '#FFFFFF'
+      }
     },
     type: 'datetime',
     dateTimeLabelFormats: { second: '%S' }
-},
-yAxis: {
+  },
+  yAxis: {
     labels: {
-        style: {
-          color: '#FFFFFF'
-        }
+      style: {
+        color: '#FFFFFF'
+      }
     },
     title: {
-        text: 'TEC DAC value',
-        style: {
-            color: '#FFFFFF'
-        }
+      text: 'TEC DAC value',
+      style: {
+        color: '#FFFFFF'
+      }
     }
-},
-credits: { enabled: false }
+  },
+  credits: { enabled: false }
 });
-setInterval(function ( ) {
-var xhttp = new XMLHttpRequest();
-xhttp.onreadystatechange = function() {
-  if (this.readyState == 4 && this.status == 200) {
-    var x = (new Date()).getTime(),
+setInterval(function () {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      var x = (new Date()).getTime(),
         y = parseFloat(this.responseText);
-    //console.log(this.responseText);
-    if(tecDacChart.series[0].data.length > data_buffer) {
-      tecDacChart.series[0].addPoint([x, y], true, true, false);
-    } else {
-      tecDacChart.series[0].addPoint([x, y], true, false, false);
+      //console.log(this.responseText);
+      if (tecDacChart.series[0].data.length > data_buffer) {
+        tecDacChart.series[0].addPoint([x, y], true, true, false);
+      } else {
+        tecDacChart.series[0].addPoint([x, y], true, false, false);
+      }
     }
-  }
-};
-xhttp.open("GET", "/tecdac", true);
-xhttp.send();
-}, sampling_period ) ;
+  };
+  xhttp.open("GET", "/tecdac", true);
+  xhttp.send();
+}, sampling_period);
 
 var tecCurrentChart = new Highcharts.Chart({
-chart:{ 
-    renderTo:'TEC Current',
+  chart: {
+    renderTo: 'TEC Current',
     backgroundColor: '#4A4A4A'
-},
-title: {
+  },
+  title: {
     text: 'TEC Current',
     style: {
-        color: '#FFFFFF'
-    }},
-series: [{
-  showInLegend: false,
-  data: []
-}],
-plotOptions: {
-  line: { animation: false,
-    dataLabels: { enabled: false }
+      color: '#FFFFFF'
+    }
   },
-  series: { color: '#18009c' }
-},
-xAxis: {
+  series: [{
+    showInLegend: false,
+    data: []
+  }],
+  plotOptions: {
+    line: {
+      animation: false,
+      dataLabels: { enabled: false }
+    },
+    series: { color: '#18009c' }
+  },
+  xAxis: {
     labels: {
-        style: {
-          color: '#FFFFFF'
-        }
-      },
+      style: {
+        color: '#FFFFFF'
+      }
+    },
     type: 'datetime',
     dateTimeLabelFormats: { second: '%S' }
-},
-yAxis: {
+  },
+  yAxis: {
     labels: {
-        style: {
-          color: '#FFFFFF'
-        }
+      style: {
+        color: '#FFFFFF'
+      }
     },
     title: {
-        text: 'TEC current value',
-        style: {
-            color: '#FFFFFF'
-        }
+      text: 'TEC current value',
+      style: {
+        color: '#FFFFFF'
+      }
     }
-},
-credits: { enabled: false }
+  },
+  credits: { enabled: false }
 });
-setInterval(function ( ) {
-var xhttp = new XMLHttpRequest();
-xhttp.onreadystatechange = function() {
-  if (this.readyState == 4 && this.status == 200) {
-    var x = (new Date()).getTime(),
+setInterval(function () {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      var x = (new Date()).getTime(),
         y = parseFloat(this.responseText);
-    //console.log(this.responseText);
-    if(tecCurrentChart.series[0].data.length > data_buffer) {
-      tecCurrentChart.series[0].addPoint([x, y], true, true, false);
-    } else {
-      tecCurrentChart.series[0].addPoint([x, y], true, false, false);
+      //console.log(this.responseText);
+      if (tecCurrentChart.series[0].data.length > data_buffer) {
+        tecCurrentChart.series[0].addPoint([x, y], true, true, false);
+      } else {
+        tecCurrentChart.series[0].addPoint([x, y], true, false, false);
+      }
     }
-  }
-};
-xhttp.open("GET", "/teccurrent", true);
-xhttp.send();
-}, sampling_period ) ;
+  };
+  xhttp.open("GET", "/teccurrent", true);
+  xhttp.send();
+}, sampling_period);
 
 var tecTemperatureChart = new Highcharts.Chart({
-chart:{ 
-    renderTo:'TEC Temperature',
+  chart: {
+    renderTo: 'TEC Temperature',
     backgroundColor: '#4A4A4A'
-},
-title: {
+  },
+  title: {
     text: 'TEC Temperature',
     style: {
-        color: '#FFFFFF'
-    }},
-series: [{
-  showInLegend: false,
-  data: []
-}],
-plotOptions: {
-  line: { animation: false,
-    dataLabels: { enabled: false }
+      color: '#FFFFFF'
+    }
   },
-  series: { color: '#f6a82e' }
-},
-xAxis: {
+  series: [{
+    showInLegend: false,
+    data: []
+  }],
+  plotOptions: {
+    line: {
+      animation: false,
+      dataLabels: { enabled: false }
+    },
+    series: { color: '#f6a82e' }
+  },
+  xAxis: {
     labels: {
-        style: {
-          color: '#FFFFFF'
-        }
+      style: {
+        color: '#FFFFFF'
+      }
     },
     type: 'datetime',
     dateTimeLabelFormats: { second: '%S' }
-},
-yAxis: {
+  },
+  yAxis: {
     labels: {
-        style: {
-          color: '#FFFFFF'
-        }
+      style: {
+        color: '#FFFFFF'
+      }
     },
     title: {
-        text: 'TEC temperature value',
-        style: {
-            color: '#FFFFFF'
-        }
+      text: 'TEC temperature value',
+      style: {
+        color: '#FFFFFF'
+      }
     }
-},
-credits: { enabled: false }
+  },
+  credits: { enabled: false }
 });
-setInterval(function ( ) {
-var xhttp = new XMLHttpRequest();
-xhttp.onreadystatechange = function() {
-  if (this.readyState == 4 && this.status == 200) {
-    var x = (new Date()).getTime(),
+setInterval(function () {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      var x = (new Date()).getTime(),
         y = parseFloat(this.responseText);
-    //console.log(this.responseText);
-    if(tecTemperatureChart.series[0].data.length > data_buffer) {
-      tecTemperatureChart.series[0].addPoint([x, y], true, true, false);
-    } else {
-      tecTemperatureChart.series[0].addPoint([x, y], true, false, false);
+      //console.log(this.responseText);
+      if (tecTemperatureChart.series[0].data.length > data_buffer) {
+        tecTemperatureChart.series[0].addPoint([x, y], true, true, false);
+      } else {
+        tecTemperatureChart.series[0].addPoint([x, y], true, false, false);
+      }
     }
-  }
-};
-xhttp.open("GET", "/tectemperature", true);
-xhttp.send();
-}, sampling_period ) ;
+  };
+  xhttp.open("GET", "/tectemperature", true);
+  xhttp.send();
+}, sampling_period);
 
 var heaterCurrentChart = new Highcharts.Chart({
-chart:{
-    renderTo:'Heater Current',
+  chart: {
+    renderTo: 'Heater Current',
     backgroundColor: '#4A4A4A'
-},
-title: {
+  },
+  title: {
     text: 'Heater Current',
     style: {
-        color: '#FFFFFF'
-    }},
-series: [{
-  showInLegend: false,
-  data: []
-}],
-plotOptions: {
-  line: { animation: false,
-    dataLabels: { enabled: false }
+      color: '#FFFFFF'
+    }
   },
-  series: { color: '#D1122E' }
-},
-xAxis: {
+  series: [{
+    showInLegend: false,
+    data: []
+  }],
+  plotOptions: {
+    line: {
+      animation: false,
+      dataLabels: { enabled: false }
+    },
+    series: { color: '#D1122E' }
+  },
+  xAxis: {
     labels: {
-        style: {
-          color: '#FFFFFF'
-        }
+      style: {
+        color: '#FFFFFF'
+      }
     },
     type: 'datetime',
     dateTimeLabelFormats: { second: '%S' }
-},
-yAxis: {
+  },
+  yAxis: {
     labels: {
-        style: {
-          color: '#FFFFFF'
-        }
+      style: {
+        color: '#FFFFFF'
+      }
     },
     title: {
-        text: 'mA',
-        style: {
-            color: '#FFFFFF'
-        }
+      text: 'mA',
+      style: {
+        color: '#FFFFFF'
+      }
     }
-},
-credits: { enabled: false }
+  },
+  credits: { enabled: false }
 });
-setInterval(function ( ) {
-var xhttp = new XMLHttpRequest();
-xhttp.onreadystatechange = function() {
-  if (this.readyState == 4 && this.status == 200) {
-    var x = (new Date()).getTime(),
+setInterval(function () {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      var x = (new Date()).getTime(),
         y = parseFloat(this.responseText);
-    //console.log(this.responseText);
-    if(heaterCurrentChart.series[0].data.length > data_buffer) {
-      heaterCurrentChart.series[0].addPoint([x, y], true, true, false);
-    } else {
-      heaterCurrentChart.series[0].addPoint([x, y], true, false, false);
+      //console.log(this.responseText);
+      if (heaterCurrentChart.series[0].data.length > data_buffer) {
+        heaterCurrentChart.series[0].addPoint([x, y], true, true, false);
+      } else {
+        heaterCurrentChart.series[0].addPoint([x, y], true, false, false);
+      }
     }
-  }
-};
-xhttp.open("GET", "/htrcurrent", true);
-xhttp.send();
-}, sampling_period ) ;
+  };
+  xhttp.open("GET", "/htrcurrent", true);
+  xhttp.send();
+}, sampling_period);
 
 
 // Here is where I put the toggle slide switch
 document.addEventListener("DOMContentLoaded", () => {
-    const toggle = document.getElementById("laserToggle"); // ← use the correct ID
-  
-    if (!toggle) {
-      console.error("Toggle element not found");
+  const toggle = document.getElementById("laserToggle"); // ← use the correct ID
+
+  if (!toggle) {
+    console.error("Toggle element not found");
+    return;
+  }
+
+  toggle.addEventListener("change", () => {
+    const state = toggle.checked ? 'on' : 'off';
+    fetch(`/toggleLaser?state=${state}`)
+      .then(res => res.text())
+      .then(txt => console.log("ESP32 response:", txt))
+      .catch(err => console.error("Error:", err));
+  });
+});
+
+// Here is where I put the toggle slide switch
+document.addEventListener("DOMContentLoaded", () => {
+  const toggle = document.getElementById("tecToggle"); // ← use the correct ID
+
+  if (!toggle) {
+    console.error("Toggle element not found");
+    return;
+  }
+
+  toggle.addEventListener("change", () => {
+    const state = toggle.checked ? 'on' : 'off';
+    fetch(`/toggleTec?state=${state}`)
+      .then(res => res.text())
+      .then(txt => console.log("ESP32 response:", txt))
+      .catch(err => console.error("Error:", err));
+  });
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  const sendButton = document.getElementById("sendLaserValuesButton");
+  const inputField = document.getElementById("laserDACvalue");
+
+  sendButton.addEventListener("click", () => {
+    const value = inputField.value;
+
+    if (value === "") {
+      alert("Please enter a value.");
       return;
     }
-  
-    toggle.addEventListener("change", () => {
-      const state = toggle.checked ? 'on' : 'off';
-      fetch(`/toggleLaser?state=${state}`)
-        .then(res => res.text())
-        .then(txt => console.log("ESP32 response:", txt))
-        .catch(err => console.error("Error:", err));
-    });
-  });
-  
-  document.addEventListener("DOMContentLoaded", () => {
-    const sendButton = document.getElementById("sendLaserValuesButton");
-    const inputField = document.getElementById("laserCurrentValue");
-  
-    sendButton.addEventListener("click", () => {
-      const value = inputField.value;
-  
-      if (value === "") {
-        alert("Please enter a value.");
-        return;
-      }
-  
-      const numValue = parseFloat(value);
-      if (isNaN(numValue) || numValue < 0 || numValue > 500) {
-        alert("Please enter a valid number between 0 and 500.");
-        return;
-      }
-  
-      fetch(`/setLaserCurrent?value=${numValue}`)
-        .then(res => res.text())
-        .then(msg => {
-          console.log("ESP32 Response:", msg);
-        })
-        .catch(err => {
-          console.error("Error sending value to ESP32:", err);
-          alert("Failed to send value.");
-        });
-    });
-  });
-  
-  function updateLaserFaultLED(status) 
-  {
-      const laserFaultLED = document.getElementById("laser_fault_led");
-  
-      if (status === 1) 
-      {
-          laserFaultLED.classList.remove("off");
-          laserFaultLED.classList.add("on");
-      } 
-      else 
-      {
-          laserFaultLED.classList.remove("on");
-          laserFaultLED.classList.add("off");
-      }
-  }
-  
-  function updateLaserOnLED(status) 
-  {
-      const laserOnLED = document.getElementById("laser_on_led");
-  
-      if (status === 1) 
-      {
-          laserOnLED.classList.remove("off");
-          laserOnLED.classList.add("on");
-      } 
-      else 
-      {
-          laserOnLED.classList.remove("on");
-          laserOnLED.classList.add("off");
-      }
-  }
-  
-  // Poll every second
-  setInterval(() => 
-  {
-      fetch("/laserFault")
-          .then(response => response.text())
-          .then(data => 
-          {
-              const status = parseInt(data.trim());
-              updateLaserFaultLED(status);
-          })
-          .catch(error => 
-          {
-              console.error("Error fetching laser fault status:", error);
-          });
-  
-      fetch("/laserOn")
-          .then(response => response.text())
-          .then(data => 
-          {
-              const status = parseInt(data.trim());
-              updateLaserOnLED(status);
-          })
-          .catch(error => 
-          {
-              console.error("Error fetching laser on status:", error);
-          });
-  
-  }, 1000);
 
-  document.getElementById("showLaserGraphButton").addEventListener("click", function () {
-    window.open("/laser-graph.html", "_blank", "width=900,height=700");
+    const numValue = parseFloat(value);
+    if (isNaN(numValue) || numValue < 0 || numValue > 255) {
+      alert("Please enter a valid number between 0 and 255.");
+      return;
+    }
+
+    fetch(`/setLaserDAC?value=${numValue}`)
+      .then(res => res.text())
+      .then(msg => {
+        console.log("ESP32 Response:", msg);
+      })
+      .catch(err => {
+        console.error("Error sending value to ESP32:", err);
+        alert("Failed to send value.");
+      });
   });
+});
+
+
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  const sendButton = document.getElementById("sendTecValuesButton");
+  const inputField = document.getElementById("tecDACvalue");
+
+  sendButton.addEventListener("click", () => {
+    const value = inputField.value;
+
+    if (value === "") {
+      alert("Please enter a value.");
+      return;
+    }
+
+    const numValue = parseFloat(value);
+    if (isNaN(numValue) || numValue < 0 || numValue > 255) {
+      alert("Please enter a valid number between 0 and 255.");
+      return;
+    }
+
+    fetch(`/setTecDAC?value=${numValue}`)
+      .then(res => res.text())
+      .then(msg => {
+        console.log("ESP32 Response:", msg);
+      })
+      .catch(err => {
+        console.error("Error sending value to ESP32:", err);
+        alert("Failed to send value.");
+      });
+  });
+});
+
+function updateLaserFaultLED(status) {
+  const laserFaultLED = document.getElementById("laser_fault_led");
+
+  if (status === 1) {
+    laserFaultLED.classList.remove("off");
+    laserFaultLED.classList.add("on");
+  }
+  else {
+    laserFaultLED.classList.remove("on");
+    laserFaultLED.classList.add("off");
+  }
+}
+
+function updateTecFaultLED(status) {
+  const tecFaultLED = document.getElementById("tec_fault_led");
+
+  if (status === 1) {
+    tecFaultLED.classList.remove("off");
+    tecFaultLED.classList.add("on");
+  }
+  else {
+    tecFaultLED.classList.remove("on");
+    tecFaultLED.classList.add("off");
+  }
+}
+
+function updateLaserOnLED(status) {
+  const laserOnLED = document.getElementById("laser_on_led");
+
+  if (status === 1) {
+    laserOnLED.classList.remove("off");
+    laserOnLED.classList.add("on");
+  }
+  else {
+    laserOnLED.classList.remove("on");
+    laserOnLED.classList.add("off");
+  }
+}
+
+function updateTecOnLED(status) {
+  const tecOnLED = document.getElementById("tec_on_led");
+
+  if (status === 1) {
+    tecOnLED.classList.remove("off");
+    tecOnLED.classList.add("on");
+  }
+  else {
+    tecOnLED.classList.remove("on");
+    tecOnLED.classList.add("off");
+  }
+}
+
+// Poll every second
+setInterval(() => {
+  fetch("/laserFault")
+    .then(response => response.text())
+    .then(data => {
+      const status = parseInt(data.trim());
+      updateLaserFaultLED(status);
+    })
+    .catch(error => {
+      console.error("Error fetching laser fault status:", error);
+    });
+
+  fetch("/laserOn")
+    .then(response => response.text())
+    .then(data => {
+      const status = parseInt(data.trim());
+      updateLaserOnLED(status);
+    })
+    .catch(error => {
+      console.error("Error fetching laser on status:", error);
+    });
+
+}, 1000);
+
+// Poll every second
+setInterval(() => {
+  fetch("/tecFault")
+    .then(response => response.text())
+    .then(data => {
+      const status = parseInt(data.trim());
+      updateTecFaultLED(status);
+    })
+    .catch(error => {
+      console.error("Error fetching tec fault status:", error);
+    });
+
+  fetch("/tecOn")
+    .then(response => response.text())
+    .then(data => {
+      const status = parseInt(data.trim());
+      updateTecOnLED(status);
+    })
+    .catch(error => {
+      console.error("Error fetching tec on status:", error);
+    });
+
+}, 1000);
+document.getElementById("showLaserGraphButton").addEventListener("click", function () {
+  window.open("/laser-graph.html", "_blank", "width=900,height=700");
+});

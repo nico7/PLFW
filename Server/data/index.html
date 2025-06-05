@@ -36,8 +36,8 @@
 
       <!-- Laser Current Input -->
       <div class="grid-item">
-        <label for="laserCurrentValue">Laser Current (mA)</label>
-        <input type="number" id="laserCurrentValue" step="1" min="0" style="width: 100%;">
+        <label for="laserDACvalue">Current DAC [0 - 2550]</label>
+        <input type="number" id="laserDACvalue" step="1" min="0" style="width: 100%;">
       </div>
 
       <!-- Send Button -->
@@ -46,24 +46,63 @@
         <button id="sendLaserValuesButton" style="background-color: #e74c3c; width: 100%;">Send</button>
       </div>
 
-      
+
       <!-- Show Graph Button -->
       <div class="grid-item">
-        <label >SHOW</label>
-        <button id="showLaserGraphButton" style="background-color: #3498db; color: white; width:100%; margin-right:20px; border: none; border-radius: 4px;">
-          Graph 
+        <label>SHOW</label>
+        <button id="showLaserGraphButton"
+          style="background-color: #3498db; color: white; width:100%; margin-right:20px; border: none; border-radius: 4px;">
+          Graphs
         </button>
       </div>
       <!-- <div id="LASER DAC" class="container"></div> -->
     </div>
   </div>
-  <!-- -------------------------------------------------------  /LASER  ----------------------------------------------------------------->
-  <!-- ---------------------------------------------------------  TEC  ------------------------------------------------------------------>
-  
-  
-  
-  <div id="LASER Current" class="container"></div>
-  <!-- ---------------------------------------------------------  TEC  ------------------------------------------------------------------>
+  <!-- --------  /LASER  ------------------>
+
+  <!-- ----------  TEC  ------------------->
+  <div style="margin-bottom: 20px;" class="container">
+    <label style="color: white; font-weight: bold; margin-bottom: 10px">TEC</label>
+    <div class="control-grid">
+
+      <!-- ON/OFF Switch -->
+      <div class="grid-item">
+        <label for="tecToggle">ON/OFF</label>
+        <label class="switch">
+          <input type="checkbox" id="tecToggle">
+          <span class="slider round"></span>
+        </label>
+      </div>
+
+      <!-- TEC Fault LED -->
+      <div class="led-container">
+        <label for="tec_fault_led" class="led-label">FAULT</label>
+        <div id="tec_fault_led" class="led off"></div>
+      </div>
+
+      <!-- TEC On LED -->
+      <div class="led-container">
+        <label for="tec_on_led" class="led-label">ON/OFF</label>
+        <div id="tec_on_led" class="led off"></div>
+      </div>
+
+      <!-- TEC Current Input -->
+      <div class="grid-item">
+        <label for="tecDACvalue">Current DAC [0 - 255]</label>
+        <input type="number" id="tecDACvalue" step="1" min="0" style="width: 100%;">
+      </div>
+
+      <!-- Send Button -->
+      <div class="grid-item">
+        <label>SET DAC</label>
+        <button id="sendTecValuesButton" style="background-color: #e74c3c; width: 100%;">Send</button>
+      </div>
+      
+      
+
+    </div>
+  </div>
+  <!-- ----------  /TEC  ------------------->
   <div id="TEC DAC" class="container"></div>
   <div id="TEC Current" class="container"></div>
   <div id="TEC Temperature" class="container"></div>

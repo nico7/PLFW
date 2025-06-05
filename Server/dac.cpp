@@ -12,6 +12,9 @@ const SPISettings spiSettings(1000000, MSBFIRST, SPI_MODE0);
 static uint16_t m_tec_ma;
 static uint16_t m_laser_ma;
 
+static uint8_t m_tec_dac;
+static uint8_t m_laser_dac;
+
 static void ll_dac_start(void) 
 {
   SPI.begin(PL_SCK, PL_MISO, PL_MOSI);
@@ -81,21 +84,25 @@ void dac_setpoint(uint8_t device, uint8_t *value)
 {
   
   Serial.print("1. DAC Value = ");
-  Serial.println(value[1]);
+  Serial.println(value[1]); // it uses the 2nd byte because the first one comes as zeros
   
   ll_dac_start();
   //TODO: If the value is less than 1V, change the gain to x1 for more resolution
   if(device == LASER)
   {
       dac_write(LASER_REG, value);
+      dac_read(LASER_REG, value);
+      m_laser_dac = value[1];
   }
   else
   {
       dac_write(TEC_REG, value);
       dac_read(TEC_REG, value);
+      m_tec_dac = value[1];
 
   }
   Serial.print("Value read = ");
+  Serial.println(value[0]);
   Serial.println(value[1]);
   ll_dac_end();
 
@@ -155,7 +162,18 @@ uint16_t dac_get_currentmA(dac_signal_E device)
 }
 
 
+uint16_t dac_get_setpoint(uint8_t device)
+{
+  if(device == LASER)
+  {
+    return m_laser_dac;
+  }
+  else
+  {
+    return m_tec_dac;
+  }
 
+}
 
 
 
