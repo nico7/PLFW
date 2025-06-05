@@ -1,199 +1,10 @@
-var sampling_period = 100;
-var data_buffer = 100;
-// var laserDacChart = new Highcharts.Chart({
-// chart:{ 
-//     renderTo : 'LASER DAC',
-//     backgroundColor: '#4A4A4A'
-// },
-// title: {
-//     text: 'LASER',
-//     style: {
-//         color: '#FFFFFF'
-//       }
-//  },
-// series: [{
-//   showInLegend: false,
-//   data: []
-// }],
-// plotOptions: {
-//   line: { animation: false,
-//     dataLabels: { enabled: false }
-//   },
-//   series: { color: '#00d78c' },
-//   style: {
-//     color: '#FFFFFF'
-//   }
-// },
-// xAxis: { 
-//     labels: {
-//         style: {
-//         color: '#FFFFFF'
-//         }
-//     },
-//     type: 'datetime',
-//     dateTimeLabelFormats: { second: '%S' },
-// },
-// yAxis: {
-//     labels: {
-//         style: {
-//           color: '#FFFFFF'
-//         }
-//     },
-//     title: {
-//         text: 'DAC VALUE',
-//         style: {
-//             color: '#FFFFFF'
-//         }
-//     },
-// },
-// credits: { enabled: false }
-// });
-// setInterval(function ( ) {
-// var xhttp = new XMLHttpRequest();
-// xhttp.onreadystatechange = function() {
-//   if (this.readyState == 4 && this.status == 200) {
-//     var x = (new Date()).getTime(),
-//         y = parseFloat(this.responseText);
-//     //console.log(this.responseText);
-//     if(laserDacChart.series[0].data.length > data_buffer) {
-//       laserDacChart.series[0].addPoint([x, y], true, true, false);
-//     } else {
-//       laserDacChart.series[0].addPoint([x, y], true, false, false);
-//     }
-//   }
-// };
-// xhttp.open("GET", "/laserdac", true);
-// xhttp.send();
-// }, sampling_period ) ;
+const sampling_period = 100;
+const data_buffer = 100;
+const half_second_sampling = 500;
 
+const width = window.innerWidth;
+const height = window.innerHeight;
 
-var tecDacChart = new Highcharts.Chart({
-  chart: {
-    renderTo: 'TEC DAC',
-    backgroundColor: '#4A4A4A'
-  },
-  title: {
-    text: 'TEC DAC',
-    style: {
-      color: '#FFFFFF'
-    }
-  },
-  series: [{
-    showInLegend: false,
-    data: []
-  }],
-  plotOptions: {
-    line: {
-      animation: false,
-      dataLabels: { enabled: false }
-    },
-    series: { color: '#18009c' }
-  },
-  xAxis: {
-    labels: {
-      style: {
-        color: '#FFFFFF'
-      }
-    },
-    type: 'datetime',
-    dateTimeLabelFormats: { second: '%S' }
-  },
-  yAxis: {
-    labels: {
-      style: {
-        color: '#FFFFFF'
-      }
-    },
-    title: {
-      text: 'TEC DAC value',
-      style: {
-        color: '#FFFFFF'
-      }
-    }
-  },
-  credits: { enabled: false }
-});
-setInterval(function () {
-  var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function () {
-    if (this.readyState == 4 && this.status == 200) {
-      var x = (new Date()).getTime(),
-        y = parseFloat(this.responseText);
-      //console.log(this.responseText);
-      if (tecDacChart.series[0].data.length > data_buffer) {
-        tecDacChart.series[0].addPoint([x, y], true, true, false);
-      } else {
-        tecDacChart.series[0].addPoint([x, y], true, false, false);
-      }
-    }
-  };
-  xhttp.open("GET", "/tecdac", true);
-  xhttp.send();
-}, sampling_period);
-
-var tecCurrentChart = new Highcharts.Chart({
-  chart: {
-    renderTo: 'TEC Current',
-    backgroundColor: '#4A4A4A'
-  },
-  title: {
-    text: 'TEC Current',
-    style: {
-      color: '#FFFFFF'
-    }
-  },
-  series: [{
-    showInLegend: false,
-    data: []
-  }],
-  plotOptions: {
-    line: {
-      animation: false,
-      dataLabels: { enabled: false }
-    },
-    series: { color: '#18009c' }
-  },
-  xAxis: {
-    labels: {
-      style: {
-        color: '#FFFFFF'
-      }
-    },
-    type: 'datetime',
-    dateTimeLabelFormats: { second: '%S' }
-  },
-  yAxis: {
-    labels: {
-      style: {
-        color: '#FFFFFF'
-      }
-    },
-    title: {
-      text: 'TEC current value',
-      style: {
-        color: '#FFFFFF'
-      }
-    }
-  },
-  credits: { enabled: false }
-});
-setInterval(function () {
-  var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function () {
-    if (this.readyState == 4 && this.status == 200) {
-      var x = (new Date()).getTime(),
-        y = parseFloat(this.responseText);
-      //console.log(this.responseText);
-      if (tecCurrentChart.series[0].data.length > data_buffer) {
-        tecCurrentChart.series[0].addPoint([x, y], true, true, false);
-      } else {
-        tecCurrentChart.series[0].addPoint([x, y], true, false, false);
-      }
-    }
-  };
-  xhttp.open("GET", "/teccurrent", true);
-  xhttp.send();
-}, sampling_period);
 
 var tecTemperatureChart = new Highcharts.Chart({
   chart: {
@@ -497,7 +308,7 @@ setInterval(() => {
       console.error("Error fetching laser on status:", error);
     });
 
-}, 1000);
+}, half_second_sampling);
 
 // Poll every second
 setInterval(() => {
@@ -521,7 +332,28 @@ setInterval(() => {
       console.error("Error fetching tec on status:", error);
     });
 
-}, 1000);
+}, half_second_sampling);
+
+
 document.getElementById("showLaserGraphButton").addEventListener("click", function () {
-  window.open("/laser-graph.html", "_blank", "width=900,height=700");
+  window.open("/laser-graph.html", "_blank", `width=${width},height=${height}`);
 });
+
+
+document.getElementById("showTecGraphButton").addEventListener("click", function () {
+  window.open("/tec-graph.html", "_blank", `width=${width/3},height=${height/2}`);
+});
+
+function scaleToFit() {
+  const baseWidth = 1920;
+  const baseHeight = 1080;
+  const scaleX = window.innerWidth / baseWidth;
+  const scaleY = window.innerHeight / baseHeight;
+  const scale = Math.min(scaleX, scaleY);
+
+  const wrapper = document.getElementById('wrapper');
+  wrapper.style.transform = `scale(${scale})`;
+}
+
+window.addEventListener('resize', scaleToFit);
+window.addEventListener('load', scaleToFit);

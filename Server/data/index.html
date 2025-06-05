@@ -2,12 +2,12 @@
 <html>
 
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, height=device-height initial-scale=1">
   <script src="https://code.highcharts.com/highcharts.js"></script>
   <link rel="stylesheet" href="/style.css">
 </head>
 
-<body>
+<body id="wrapper">
   <!-- -------------------------------------------------------  LASER  --------------------------------------------------------------- -->
   <div style="margin-bottom: 20px;" class="container">
     <label style="color: white; font-weight: bold; margin-bottom: 10px">LASER</label>
@@ -36,26 +36,26 @@
 
       <!-- Laser Current Input -->
       <div class="grid-item">
-        <label for="laserDACvalue">Current DAC [0 - 2550]</label>
+        <label for="laserDACvalue">Current DAC [0 - 255]</label>
         <input type="number" id="laserDACvalue" step="1" min="0" style="width: 100%;">
       </div>
 
       <!-- Send Button -->
       <div class="grid-item">
         <label>SET DAC</label>
-        <button id="sendLaserValuesButton" style="background-color: #e74c3c; width: 100%;">Send</button>
+        <button class="button button-red" id="sendLaserValuesButton" style="background-color: #e74c3c; width: 100%;">Send</button>
       </div>
 
 
       <!-- Show Graph Button -->
       <div class="grid-item">
         <label>SHOW</label>
-        <button id="showLaserGraphButton"
-          style="background-color: #3498db; color: white; width:100%; margin-right:20px; border: none; border-radius: 4px;">
+        <button class="button button-blue" id="showLaserGraphButton"
+          style="background-color: #3498db; color: white; width:100%; margin-right:10px; border: none;  ">
           Graphs
         </button>
       </div>
-      <!-- <div id="LASER DAC" class="container"></div> -->
+      
     </div>
   </div>
   <!-- --------  /LASER  ------------------>
@@ -95,16 +95,22 @@
       <!-- Send Button -->
       <div class="grid-item">
         <label>SET DAC</label>
-        <button id="sendTecValuesButton" style="background-color: #e74c3c; width: 100%;">Send</button>
+        <button class="button button-red" id="sendTecValuesButton" style="background-color: #e74c3c; width: 100%;">Send</button>
       </div>
       
-      
+      <!-- Show Graph Button -->
+      <div class="grid-item">
+        <label>SHOW</label>
+        <button class="button button-blue" id="showTecGraphButton"
+          style="background-color: #3498db; color: white; width:100%; margin-right:10px; border: none;  ">
+          Graphs
+        </button>
+      </div>
 
     </div>
   </div>
   <!-- ----------  /TEC  ------------------->
-  <div id="TEC DAC" class="container"></div>
-  <div id="TEC Current" class="container"></div>
+
   <div id="TEC Temperature" class="container"></div>
   <div id="Heater Current" class="container"></div>
 

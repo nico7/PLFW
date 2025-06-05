@@ -162,6 +162,12 @@ void setup() {
     server.on("/laser-graph.html", HTTP_GET, [](AsyncWebServerRequest *request) {
       request->send(LittleFS, "/laser-graph.html", "text/html");
     });
+
+    // Serve tec-graph.html explicitly if needed
+    server.on("/tec-graph.html", HTTP_GET, [](AsyncWebServerRequest *request) {
+      request->send(LittleFS, "/tec-graph.html", "text/html");
+    });
+
     server.on("/laserdac", HTTP_GET, [](AsyncWebServerRequest *request) {
       request->send_P(200, "text/plain", String(dac_get_setpoint(LASER)).c_str());
     });
@@ -303,7 +309,7 @@ void setup() {
       int ledState;
 
       if (tec_is_enabled()) {
-        ledState = !digitalRead(L_N_FAULT);  // or your actual status logic
+        ledState = !digitalRead(P_N_FAULT);  // or your actual status logic
       } else {
         ledState = 0;
       }
