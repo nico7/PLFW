@@ -81,6 +81,7 @@ uint16_t adc_get(adc_signal_E ch)
   {
     case ADC_TEC:
       adc_read(ADC_TEC, &m_tec_adc);
+      m_tec_adc = (uint16_t) (((((double) m_tec_adc) * 330000.0 / 1023.0))/(TEC_SENS_RES));
       retval = m_tec_adc;
       break;
     case ADC_LSR:

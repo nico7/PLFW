@@ -43,7 +43,8 @@
       <!-- Send Button -->
       <div class="grid-item">
         <label>SET DAC</label>
-        <button class="button button-red" id="sendLaserValuesButton" style="background-color: #e74c3c; width: 100%;">Send</button>
+        <button class="button button-red" id="sendLaserValuesButton"
+          style="background-color: #e74c3c; width: 100%;">Send</button>
       </div>
 
 
@@ -55,7 +56,7 @@
           Graphs
         </button>
       </div>
-      
+
     </div>
   </div>
   <!-- --------  /LASER  ------------------>
@@ -95,9 +96,10 @@
       <!-- Send Button -->
       <div class="grid-item">
         <label>SET DAC</label>
-        <button class="button button-red" id="sendTecValuesButton" style="background-color: #e74c3c; width: 100%;">Send</button>
+        <button class="button button-red" id="sendTecValuesButton"
+          style="background-color: #e74c3c; width: 100%;">Send</button>
       </div>
-      
+
       <!-- Show Graph Button -->
       <div class="grid-item">
         <label>SHOW</label>
@@ -111,8 +113,33 @@
   </div>
   <!-- ----------  /TEC  ------------------->
 
-  <div id="TEC Temperature" class="container"></div>
-  <div id="Heater Current" class="container"></div>
+
+  <div style="margin-bottom: 20px;" class="container">
+    <label style="color: white; font-weight: bold; margin-bottom: 10px">READINGS & TIMER</label>
+    <div class="control-grid_misc">
+
+      <div class="grid-item">
+        <label>TOGGLE</label>
+        <button class="button button-orange" id="toggleTecTempButton">Temperature Reading</button>
+        <div id="tecOutputContainer">
+          <span id="tecOutputField">1</span>
+        </div>
+      </div>
+
+      <div class="grid-item">
+        <label>TOGGLE</label>
+        <button class="button button-yellow" id="toggleHeaterButton">Current Reading</button>
+        <div id="heaterOutputContainer">
+          <span id="heaterOutputField">2</span>
+        </div>
+      </div>
+
+
+    </div> <!-- control-grid -->
+  </div>
+
+  <!-- <div id="TEC Temperature" class="container"></div> -->
+  <!-- <div id="Heater Current" class="container"></div> -->
 
 </body>
 <script src="graphs.js"></script>

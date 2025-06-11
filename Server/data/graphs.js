@@ -1,4 +1,6 @@
-const sampling_period = 100;
+const sampling_period_ms = 200;
+const slow_sampling_period_ms = 500;
+
 const data_buffer = 100;
 const half_second_sampling = 500;
 
@@ -6,134 +8,263 @@ const width = window.innerWidth;
 const height = window.innerHeight;
 
 
-var tecTemperatureChart = new Highcharts.Chart({
-  chart: {
-    renderTo: 'TEC Temperature',
-    backgroundColor: '#4A4A4A'
-  },
-  title: {
-    text: 'TEC Temperature',
-    style: {
-      color: '#FFFFFF'
-    }
-  },
-  series: [{
-    showInLegend: false,
-    data: []
-  }],
-  plotOptions: {
-    line: {
-      animation: false,
-      dataLabels: { enabled: false }
-    },
-    series: { color: '#f6a82e' }
-  },
-  xAxis: {
-    labels: {
-      style: {
-        color: '#FFFFFF'
+
+let showingTecChart = false;
+const tecOutputContainer = document.getElementById('tecOutputContainer');
+const tecToggleButton = document.getElementById('toggleTecTempButton');
+
+tecToggleButton.addEventListener('click', () => {
+  // Clear the container
+  tecOutputContainer.innerHTML = '';
+
+  if (showingTecChart) {
+    // Revert to number output
+    const outputField = document.createElement('span');
+    outputField.id = 'tecOutputField';
+    outputField.textContent = ''; // Or set dynamic value here
+    tecOutputContainer.appendChild(outputField);
+
+    // Destroy the Highcharts instance if it exists
+    Highcharts.charts.forEach(chart => {
+      if (chart && chart.renderTo.id === 'TEC Temperature') {
+        chart.destroy();
       }
-    },
-    type: 'datetime',
-    dateTimeLabelFormats: { second: '%S' }
-  },
-  yAxis: {
-    labels: {
-      style: {
-        color: '#FFFFFF'
-      }
-    },
-    title: {
-      text: 'TEC temperature value',
-      style: {
-        color: '#FFFFFF'
-      }
-    }
-  },
-  credits: { enabled: false }
+    });
+  } else {
+    // Add chart container
+    const chartDiv = document.createElement('div');
+    chartDiv.id = 'TEC Temperature';
+    chartDiv.className = 'container';
+    tecOutputContainer.appendChild(chartDiv);
+
+    // Create the chart
+    var tecTemperatureChart = new Highcharts.Chart({
+      chart: {
+        renderTo: 'TEC Temperature',
+        backgroundColor: '#4A4A4A'
+      },
+      title: {
+        text: 'TEC Temperature',
+        style: {
+          color: '#FFFFFF'
+        }
+      },
+      series: [{
+        showInLegend: false,
+        data: []
+      }],
+      plotOptions: {
+        line: {
+          animation: false,
+          dataLabels: { enabled: false }
+        },
+        series: { color: '#f6a82e' }
+      },
+      xAxis: {
+        labels: {
+          style: {
+            color: '#FFFFFF'
+          }
+        },
+        type: 'datetime',
+        dateTimeLabelFormats: { second: '%S' }
+      },
+      yAxis: {
+        min: 300,
+        max: 700,
+        labels: {
+          style: {
+            color: '#FFFFFF'
+          }
+        },
+        title: {
+          text: 'TEC temperature value',
+          style: {
+            color: '#FFFFFF'
+          }
+        }
+      },
+      credits: { enabled: false }
+    });
+    setInterval(function () {
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+          var x = (new Date()).getTime(),
+            y = parseFloat(this.responseText);
+          //console.log(this.responseText);
+          if (tecTemperatureChart.series[0].data.length > data_buffer) {
+            tecTemperatureChart.series[0].addPoint([x, y], true, true, false);
+          } else {
+            tecTemperatureChart.series[0].addPoint([x, y], true, false, false);
+          }
+        }
+      };
+      xhttp.open("GET", "/tectemperature", true);
+      xhttp.send();
+    }, sampling_period_ms);
+  }
+
+  showingTecChart = !showingTecChart;
 });
+
+
+
+// This part below is for updating just the numeric value
 setInterval(function () {
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function () {
-    if (this.readyState == 4 && this.status == 200) {
-      var x = (new Date()).getTime(),
-        y = parseFloat(this.responseText);
-      //console.log(this.responseText);
-      if (tecTemperatureChart.series[0].data.length > data_buffer) {
-        tecTemperatureChart.series[0].addPoint([x, y], true, true, false);
+    if (this.readyState === 4 && this.status === 200) {
+      var x = (new Date()).getTime();
+      var y = parseFloat(this.responseText);
+
+      if (showingTecChart) {
+        // Update the chart
+        if (tecTemperatureChart.series[0].data.length > data_buffer) {
+          tecTemperatureChart.series[0].addPoint([x, y], true, true, false);
+        } else {
+          tecTemperatureChart.series[0].addPoint([x, y], true, false, false);
+        }
       } else {
-        tecTemperatureChart.series[0].addPoint([x, y], true, false, false);
+        // Update the numeric field
+        const outputField = document.getElementById('tecOutputField');
+        if (outputField) {
+          outputField.textContent = y.toFixed(2); // Optional: format to 2 decimal places
+        }
       }
     }
   };
   xhttp.open("GET", "/tectemperature", true);
   xhttp.send();
-}, sampling_period);
+}, slow_sampling_period_ms);
 
-var heaterCurrentChart = new Highcharts.Chart({
-  chart: {
-    renderTo: 'Heater Current',
-    backgroundColor: '#4A4A4A'
-  },
-  title: {
-    text: 'Heater Current',
-    style: {
-      color: '#FFFFFF'
-    }
-  },
-  series: [{
-    showInLegend: false,
-    data: []
-  }],
-  plotOptions: {
-    line: {
-      animation: false,
-      dataLabels: { enabled: false }
-    },
-    series: { color: '#D1122E' }
-  },
-  xAxis: {
-    labels: {
-      style: {
-        color: '#FFFFFF'
+
+let showingHeaterChart = false;
+const heaterOutputContainer = document.getElementById('heaterOutputContainer');
+const heaterToggleButton = document.getElementById('toggleHeaterButton');
+
+heaterToggleButton.addEventListener('click', () => {
+  // Clear the container
+  heaterOutputContainer.innerHTML = '';
+
+  if (showingHeaterChart) {
+    // Revert to number output
+    const outputField = document.createElement('span');
+    outputField.id = 'heaterOutputField';
+    outputField.textContent = ''; // Or set dynamic value here
+    heaterOutputContainer.appendChild(outputField);
+
+    // Destroy the Highcharts instance if it exists
+    Highcharts.charts.forEach(chart => {
+      if (chart && chart.renderTo.id === 'Heater Current') {
+        chart.destroy();
       }
-    },
-    type: 'datetime',
-    dateTimeLabelFormats: { second: '%S' }
-  },
-  yAxis: {
-    labels: {
-      style: {
-        color: '#FFFFFF'
-      }
-    },
-    title: {
-      text: 'mA',
-      style: {
-        color: '#FFFFFF'
-      }
-    }
-  },
-  credits: { enabled: false }
+    });
+  } else {
+    // Add chart container
+    const chartDiv = document.createElement('div');
+    chartDiv.id = 'Heater Current';
+    chartDiv.className = 'container';
+    heaterOutputContainer.appendChild(chartDiv);
+
+    var heaterCurrentChart = new Highcharts.Chart({
+      chart: {
+        renderTo: 'Heater Current',
+        backgroundColor: '#4A4A4A'
+      },
+      title: {
+        text: 'Heater Current',
+        style: {
+          color: '#FFFFFF'
+        }
+      },
+      series: [{
+        showInLegend: false,
+        data: []
+      }],
+      plotOptions: {
+        line: {
+          animation: false,
+          dataLabels: { enabled: false }
+        },
+        series: { color: '#D1122E' }
+      },
+      xAxis: {
+        labels: {
+          style: {
+            color: '#FFFFFF'
+          }
+        },
+        type: 'datetime',
+        dateTimeLabelFormats: { second: '%S' }
+      },
+      yAxis: {
+        min: 0,
+        max: 100,
+        labels: {
+          style: {
+            color: '#FFFFFF'
+          }
+        },
+        title: {
+          text: 'mA',
+          style: {
+            color: '#FFFFFF'
+          }
+        }
+      },
+      credits: { enabled: false }
+    });
+    setInterval(function () {
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+          var x = (new Date()).getTime(),
+            y = parseFloat(this.responseText);
+          //console.log(this.responseText);
+          if (heaterCurrentChart.series[0].data.length > data_buffer) {
+            heaterCurrentChart.series[0].addPoint([x, y], true, true, false);
+          } else {
+            heaterCurrentChart.series[0].addPoint([x, y], true, false, false);
+          }
+        }
+      };
+      xhttp.open("GET", "/htrcurrent", true);
+      xhttp.send();
+    }, sampling_period_ms);
+  }
+
+  showingHeaterChart = !showingHeaterChart;
 });
+
+
+// This part below is for updating just the numeric value of the heater
 setInterval(function () {
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function () {
-    if (this.readyState == 4 && this.status == 200) {
-      var x = (new Date()).getTime(),
-        y = parseFloat(this.responseText);
-      //console.log(this.responseText);
-      if (heaterCurrentChart.series[0].data.length > data_buffer) {
-        heaterCurrentChart.series[0].addPoint([x, y], true, true, false);
+    if (this.readyState === 4 && this.status === 200) {
+      var x = (new Date()).getTime();
+      var y = parseFloat(this.responseText);
+
+      if (showingHeaterChart) {
+        // Update the chart
+        if (heaterCurrentChart.series[0].data.length > data_buffer) {
+          heaterCurrentChart.series[0].addPoint([x, y], true, true, false);
+        } else {
+          heaterCurrentChart.series[0].addPoint([x, y], true, false, false);
+        }
       } else {
-        heaterCurrentChart.series[0].addPoint([x, y], true, false, false);
+        // Update the numeric field
+        const outputField = document.getElementById('heaterOutputField');
+        if (outputField) {
+          outputField.textContent = y.toFixed(2); // Optional: format to 2 decimal places
+        }
       }
     }
   };
   xhttp.open("GET", "/htrcurrent", true);
   xhttp.send();
-}, sampling_period);
-
+}, slow_sampling_period_ms);
 
 // Here is where I put the toggle slide switch
 document.addEventListener("DOMContentLoaded", () => {
@@ -341,7 +472,7 @@ document.getElementById("showLaserGraphButton").addEventListener("click", functi
 
 
 document.getElementById("showTecGraphButton").addEventListener("click", function () {
-  window.open("/tec-graph.html", "_blank", `width=${width/3},height=${height/2}`);
+  window.open("/tec-graph.html", "_blank", `width=${width / 3},height=${height / 2}`);
 });
 
 function scaleToFit() {
@@ -357,3 +488,4 @@ function scaleToFit() {
 
 window.addEventListener('resize', scaleToFit);
 window.addEventListener('load', scaleToFit);
+
