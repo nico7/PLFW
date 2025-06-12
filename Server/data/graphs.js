@@ -2,7 +2,7 @@ const sampling_period_ms = 200;
 const slow_sampling_period_ms = 500;
 
 const data_buffer = 100;
-const half_second_sampling = 500;
+
 
 const width = window.innerWidth;
 const height = window.innerHeight;
@@ -439,7 +439,7 @@ setInterval(() => {
       console.error("Error fetching laser on status:", error);
     });
 
-}, half_second_sampling);
+}, slow_sampling_period_ms);
 
 // Poll every second
 setInterval(() => {
@@ -463,17 +463,59 @@ setInterval(() => {
       console.error("Error fetching tec on status:", error);
     });
 
-}, half_second_sampling);
+}, slow_sampling_period_ms);
 
 
-document.getElementById("showLaserGraphButton").addEventListener("click", function () {
-  window.open("/laser-graph.html", "_blank", `width=${width},height=${height}`);
+// document.getElementById("showLaserGraphButton").addEventListener("click", function () {
+//   window.open("/laser-graph.html", "_blank", `width=${width},height=${height}`);
+// });
+
+let laserWindow = null;
+const laserButton = document.getElementById("showLaserGraphButton");
+
+laserButton.addEventListener("click", function () {
+  // If the window is closed or never opened, open it
+  if (!laserWindow || laserWindow.closed) {
+    laserWindow = window.open("/laser-graph.html", "_blank", `width=${width},height=${height}`);
+    laserButton.textContent = "Number";
+  } else {
+    laserWindow.close();
+    laserButton.textContent = "Graph";
+  }
 });
 
+// Optional: check if user closed the popup manually and update button
+setInterval(() => {
+  if (laserWindow && laserWindow.closed) {
+    laserButton.textContent = "Graph";
+  }
+}, 500);
 
-document.getElementById("showTecGraphButton").addEventListener("click", function () {
-  window.open("/tec-graph.html", "_blank", `width=${width / 3},height=${height / 2}`);
+let tecWindow = null;
+const tecButton = document.getElementById("showTecGraphButton");
+
+tecButton.addEventListener("click", function () {
+  // If the window is closed or never opened, open it
+  if (!tecWindow || tecWindow.closed) {
+    tecWindow = window.open("/tec-graph.html", "_blank", `width=${width},height=${height}`);
+    tecButton.textContent = "Number";
+  } else {
+    tecWindow.close();
+    tecButton.textContent = "Graph";
+  }
 });
+
+// Optional: check if user closed the popup manually and update button
+setInterval(() => {
+  if (tecWindow && tecWindow.closed) {
+    tecButton.textContent = "Graph";
+  }
+}, 500);
+
+
+// document.getElementById("showTecGraphButton").addEventListener("click", function () {
+//   window.open("/tec-graph.html", "_blank", `width=${width / 3},height=${height / 2}`);
+// });
 
 function scaleToFit() {
   const baseWidth = 1920;
