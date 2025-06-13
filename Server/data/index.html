@@ -10,9 +10,10 @@
 <body id="wrapper">
   <!-- -------------------------------------------------------  LASER  --------------------------------------------------------------- -->
   <div style="margin-bottom: 20px;" class="container">
-    <label style="color: white; font-weight: bold; margin-bottom: 10px">LASER</label>
+    <label style="color: white; font-weight: bold; margin-bottom: 10px; font-size: 35px;" >LASER</label>
+    
 
-    <div class="control-grid">
+    <div class="control-grid" style="border-top: 3px solid black; padding: 20px;">
       <!-- ON/OFF Switch -->
       <div class="grid-item">
         <label for="laserToggle">ON/OFF</label>
@@ -37,14 +38,14 @@
       <!-- Laser Current Input -->
       <div class="grid-item">
         <label for="laserDACvalue">Current DAC [0 - 255]</label>
-        <input type="number" id="laserDACvalue" step="1" min="0" style="width: 100%;">
+        <input type="number" id="laserDACvalue" step="1" min="0">
       </div>
 
       <!-- Send Button -->
       <div class="grid-item">
         <label>SET DAC</label>
         <button class="button button-red" id="sendLaserValuesButton"
-          style="background-color: #e74c3c; width: 100%;">Send</button>
+          style="background-color: #e74c3c; width: 90%;">Send</button>
       </div>
 
 
@@ -52,7 +53,7 @@
       <div class="grid-item">
         <label>SHOW</label>
         <button class="button button-blue" id="showLaserGraphButton"
-          style="background-color: #3498db; color: white; width:100%; margin-right:10px; border: none;  ">
+          style="background-color: #3498db; color: white; width:90%; margin-right:10px; border: none;  ">
           Graphs
         </button>
       </div>
@@ -63,8 +64,9 @@
 
   <!-- ----------  TEC  ------------------->
   <div style="margin-bottom: 20px;" class="container">
-    <label style="color: white; font-weight: bold; margin-bottom: 10px">TEC</label>
-    <div class="control-grid">
+    <label style="color: white; font-weight: bold; margin-bottom: 10px; font-size: 35px;">TEC</label>
+
+    <div class="control-grid" style="border-top: 3px solid black; padding: 20px;">
 
       <!-- ON/OFF Switch -->
       <div class="grid-item">
@@ -90,21 +92,21 @@
       <!-- TEC Current Input -->
       <div class="grid-item">
         <label for="tecDACvalue">Current DAC [0 - 255]</label>
-        <input type="number" id="tecDACvalue" step="1" min="0" style="width: 100%;">
+        <input type="number" id="tecDACvalue" step="1" min="0">
       </div>
 
       <!-- Send Button -->
       <div class="grid-item">
         <label>SET DAC</label>
         <button class="button button-red" id="sendTecValuesButton"
-          style="background-color: #e74c3c; width: 100%;">Send</button>
+          style="background-color: #e74c3c; width: 90%;">Send</button>
       </div>
 
       <!-- Show Graph Button -->
       <div class="grid-item">
         <label>SHOW</label>
         <button class="button button-blue" id="showTecGraphButton"
-          style="background-color: #3498db; color: white; width:100%; margin-right:10px; border: none;  ">
+          style="background-color: #3498db; color: white; width:90%; margin-right:10px; border: none;  ">
           Graphs
         </button>
       </div>
@@ -115,22 +117,22 @@
 
 
   <div style="margin-bottom: 20px;" class="container">
-    <label style="color: white; font-weight: bold; margin-bottom: 10px">READINGS & TIMER</label>
-    <div class="control-grid_misc">
-
+    <label style="color: white; font-weight: bold; margin-bottom: 10px; font-size: 35px;">READINGS & TIMER</label>
+    
+    <div class="control-grid_misc" style="border-top: 3px solid black; padding: 20px;">
       <div class="grid-item">
         <label>TOGGLE</label>
-        <button class="button button-orange" id="toggleTecTempButton" style="width: 100%;">Temperature Reading</button>
+        <button class="button button-orange" id="toggleTecTempButton" style="width: 90%;">Temperature Reading</button>
         <div id="tecOutputContainer">
-          <span id="tecOutputField">1</span>
+          <span id="tecOutputField" class="live">1</span>
         </div>
       </div>
 
       <div class="grid-item">
         <label>TOGGLE</label>
-        <button class="button button-yellow" id="toggleHeaterButton" style="width: 100%;">Current Reading</button>
+        <button class="button button-yellow" id="toggleHeaterButton" style="width: 90%;">Current Reading</button>
         <div id="heaterOutputContainer">
-          <span id="heaterOutputField">2</span>
+          <span id="heaterOutputField" class="live">2</span>
         </div>
       </div>
 

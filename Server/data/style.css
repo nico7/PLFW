@@ -34,6 +34,7 @@ button {
   width: 100px;
   border-radius: 4px;
   transition-duration: 0.4s;
+  margin:20px;
 }
 
 h1 {
@@ -64,6 +65,7 @@ input[type=submit] {
   margin-right: 10px;
   border-radius: 4px;
   transition-duration: 0.4s;
+  
 }
 
 input[type=submit]:hover {
@@ -71,7 +73,6 @@ input[type=submit]:hover {
 }
 
 input[type=text],
-input[type=number],
 select {
   width: 50%;
   padding: 12px 20px;
@@ -80,6 +81,61 @@ select {
   border: 1px solid #ccc;
   border-radius: 4px;
   box-sizing: border-box;
+}
+
+input[type="number"] {
+  background: rgba(0, 0, 0, 0.85);
+  border: 2px solid #ffffff;
+  border-radius: 10px;
+  padding: 14px 20px;
+  font-size: 28px;
+  font-family: Calibri, Arial, sans-serif;
+  color: #00d520;
+  box-shadow: 0 0 12px #15ff00, inset 0 0 5px #77ff00;
+  transition: all 0.3s ease;
+  outline: none;
+  width: 90%;
+  letter-spacing: 1px;
+  caret-color: #00f0ff;
+  appearance: textfield; /* hides up/down arrows in most browsers */
+  margin:10px;
+}
+
+/* Hide number spinners in Chrome, Safari, Edge
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+} */
+
+/* Placeholder styling */
+input[type="number"]::placeholder {
+  color: #00f0ff88;
+  text-shadow: 0 0 5px #00f0ff;
+}
+
+/* Focused state with glow animation */
+input[type="number"]:focus {
+  border-color: #00f0ff;
+  box-shadow:
+    0 0 20px #00f0ff,
+    0 0 30px #00f0ff,
+    inset 0 0 10px #00f0ff;
+  background: rgba(0, 0, 0, 0.95);
+  animation: pulse-glow 1.5s infinite ease-in-out;
+}
+
+/* Pulse animation */
+@keyframes pulse-glow {
+  0% {
+    box-shadow: 0 0 12px #00f0ff, inset 0 0 5px #00f0ff;
+  }
+  50% {
+    box-shadow: 0 0 24px #00f0ff, inset 0 0 12px #00f0ff;
+  }
+  100% {
+    box-shadow: 0 0 12px #00f0ff, inset 0 0 5px #00f0ff;
+  }
 }
 
 /* Checked state */
@@ -93,6 +149,8 @@ input:checked+.slider:before {
 
 label {
   font-size: 1.2rem;
+  font-weight:600;
+  margin:10px;
 }
 
 .button-on {
@@ -113,7 +171,7 @@ label {
 
 .button-container {
   text-align: center;
-  margin: 20px 0;
+  margin: 10px 0;
 }
 
 
@@ -173,7 +231,6 @@ label {
 
 .control-grid label {
   color: white;
-  margin-bottom: 5px;
 }
 
 .input-group {
@@ -224,7 +281,6 @@ label {
 .led-label {
   color: #fff;
   user-select: none;
-  font-weight: 600;
   text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
 }
 
@@ -238,6 +294,7 @@ label {
     0 2px 6px rgba(0, 0, 0, 0.6);
   position: relative;
   transition: background 0.3s ease, box-shadow 0.3s ease;
+  margin:10px;
 }
 
 /* Glossy highlight */
@@ -405,12 +462,12 @@ label {
 }
 
 .button-yellow {
-  background: linear-gradient(to bottom, #f9e79f, #f4d03f);
+  background: linear-gradient(to bottom, #f5d44e, #a88808);
   border: 1px solid #d4ac0d;
 }
 
 .button-yellow:hover {
-  background: linear-gradient(to bottom, #fef9d3, #f7dc6f);
+  background: linear-gradient(to bottom, #f6efba, #967c15);
   box-shadow:
     inset 0 2px 6px rgba(255, 255, 255, 0.8),
     0 6px 12px rgba(0, 0, 0, 0.35);
@@ -457,4 +514,42 @@ label {
   background: linear-gradient(to bottom, rgba(255, 255, 255, 0.6), transparent);
   border-radius: 16px 16px 0 0;
   pointer-events: none;
+}
+
+#heaterOutputField,
+#tecOutputField {
+  display: inline-block;
+  min-width: 120px;
+  padding: 14px 20px;
+  font-size: 28px;
+  font-family: Calibri, Arial, sans-serif;
+  color: #ff4800;
+  background: rgba(0, 0, 0, 0.85);
+  border: 2px solid #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 0 12px #f50808, inset 0 0 6px #fda400;
+  text-align: center;
+  letter-spacing: 1px;
+  margin: 8px;
+  user-select: none;
+  transition: all 0.3s ease;
+}
+
+/* Optional: Live update pulse effect */
+#heaterOutputField.live,
+#tecOutputField.live {
+  animation: pulse-glow 1.5s infinite ease-in-out;
+}
+
+/* Shared keyframes animation (if desired) */
+@keyframes pulse-glow {
+  0% {
+  box-shadow: 0 0 12px #f50808, inset 0 0 5px #fda400;
+  }
+  50% {
+    box-shadow: 0 0 24px #f50808, inset 0 0 12px #fda400;
+  }
+  100% {
+    box-shadow: 0 0 12px #f50808, inset 0 0 5px #fda400;
+  }
 }
