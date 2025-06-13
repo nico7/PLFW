@@ -129,7 +129,7 @@ setInterval(function () {
         // Update the numeric field
         const outputField = document.getElementById('tecOutputField');
         if (outputField) {
-          outputField.textContent = y.toFixed(2); // Optional: format to 2 decimal places
+          outputField.textContent = y; // Optional: format to 2 decimal places
         }
       }
     }
@@ -257,7 +257,7 @@ setInterval(function () {
         // Update the numeric field
         const outputField = document.getElementById('heaterOutputField');
         if (outputField) {
-          outputField.textContent = y.toFixed(2); // Optional: format to 2 decimal places
+          outputField.textContent = y; // Optional: format to 2 decimal places
         }
       }
     }
@@ -466,30 +466,93 @@ setInterval(() => {
 }, slow_sampling_period_ms);
 
 
-// document.getElementById("showLaserGraphButton").addEventListener("click", function () {
-//   window.open("/laser-graph.html", "_blank", `width=${width},height=${height}`);
-// });
-
 let laserWindow = null;
+let showingLaserChart = false;
+let lastValue = 0;
 const laserButton = document.getElementById("showLaserGraphButton");
+const laserOutputContainer = document.getElementById('laserOutputContainer');
 
+// Click handler to toggle between graph and number
 laserButton.addEventListener("click", function () {
-  // If the window is closed or never opened, open it
-  if (!laserWindow || laserWindow.closed) {
-    laserWindow = window.open("/laser-graph.html", "_blank", `width=${width},height=${height}`);
+  laserOutputContainer.innerHTML = '';
+
+  if (!showingLaserGraph) {
+    const width = 800;
+    const height = 600;
+    laserWindow = window.open("laser-graph.html", "_blank", `width=${width},height=${height}`);
     laserButton.textContent = "Number";
+    showingLaserGraph = true;
   } else {
-    laserWindow.close();
+    if (laserWindow && !laserWindow.closed) {
+      laserWindow.close();
+    }
+    laserWindow = null;
+    showingLaserGraph = false;
     laserButton.textContent = "Graph";
+    renderLaserNumberOutput(); // Show number + label
   }
+  showingLaserChart = !showingLaserChart;
 });
 
-// Optional: check if user closed the popup manually and update button
+// Function to render the label + numeric output
+function renderLaserNumberOutput() {
+  laserOutputContainer.innerHTML = '';
+
+  const wrapper = document.createElement('div');
+  wrapper.style.display = 'flex';
+  wrapper.style.alignItems = 'center';
+  wrapper.style.gap = '10px';
+
+  const label = document.createElement('span');
+  label.id = 'laserCurrentLabel';
+  label.textContent = 'Current (mA):';
+  label.style.fontSize = '20px';
+  label.style.fontFamily = 'Calibri, Arial, sans-serif';
+
+  const outputField = document.createElement('span');
+  outputField.id = 'laserOutputField';
+  outputField.className = 'live';
+  outputField.textContent = lastValue;
+  
+
+  wrapper.appendChild(label);
+  wrapper.appendChild(outputField);
+  laserOutputContainer.appendChild(wrapper);
+}
+
+// Watchdog: check if user closed the popup manually
 setInterval(() => {
-  if (laserWindow && laserWindow.closed) {
+  if (!laserWindow || laserWindow.closed) {
+    laserWindow = null;
+    showingLaserGraph = false;
     laserButton.textContent = "Graph";
+    renderLaserNumberOutput();
   }
-}, 500);
+}, slow_sampling_period_ms);
+
+// This part below is for updating just the numeric value
+setInterval(function () {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function () {
+    if (this.readyState === 4 && this.status === 200) {
+      var y = parseFloat(this.responseText);
+
+      if (!showingLaserChart) {
+                // Update the numeric field
+        const outputField = document.getElementById('laserOutputField');
+        if (outputField) {
+          lastValue = y;
+          outputField.textContent = lastValue; // Optional: format to 2 decimal places
+        }
+      }
+    }
+  };
+  xhttp.open("GET", "/lasercurrent", true);
+  xhttp.send();
+}, slow_sampling_period_ms);
+
+
+
 
 let tecWindow = null;
 const tecButton = document.getElementById("showTecGraphButton");
