@@ -9,116 +9,139 @@
 
 <body id="wrapper">
   <!-- -------------------------------------------------------  LASER  --------------------------------------------------------------- -->
-  <div style="margin-bottom: 20px;" class="container">
-    <label style="color: white; font-weight: bold; margin-bottom: 10px; font-size: 35px;" >LASER</label>
-    
+  <div class="container" style="margin-bottom: 5px;">
+    <label style="color: white; font-weight: bold; font-size: 35px;">LASER</label>
 
-    <div class="control-grid" style="border-top: 3px solid black; padding: 20px;">
-      <!-- ON/OFF Switch -->
-      <div class="grid-item">
-        <label for="laserToggle">ON/OFF</label>
-        <label class="switch">
-          <input type="checkbox" id="laserToggle">
-          <span class="slider round"></span>
-        </label>
+    <div class="outer-grid" style="border-top: 2px solid black;">
+
+      <div class="left-side-grid" style="border-right: 2px solid black;">
+        <!-- ON/OFF Switch -->
+        <div class="grid-item">
+          <label for="laserToggle">ON/OFF</label>
+          <label class="switch">
+            <input type="checkbox" id="laserToggle">
+            <span class="slider round"></span>
+          </label>
+        </div>
+
+
+        <!-- Laser Current Input -->
+        <div class="grid-item">
+          <label for="laserDACvalue">Current DAC [0 - 255]</label>
+          <input type="number" id="laserDACvalue" step="1" min="0">
+        </div>
+
+        <!-- Send Button -->
+        <div class="grid-item">
+          <label>SET DAC</label>
+          <button class="button button-red" id="sendLaserValuesButton"
+            style="background-color: #e74c3c; width: 90%;">Send</button>
+        </div>
       </div>
 
-      <!-- Laser Fault LED -->
-      <div class="led-container">
-        <label for="laser_fault_led" class="led-label">FAULT</label>
-        <div id="laser_fault_led" class="led off"></div>
+      <div class="right-side-grid">
+
+        <!-- Laser On LED -->
+        <div class="grid-item">
+          <div class="led-container">
+            <label for="laser_on_led" class="led-label">ON/OFF</label>
+            <div id="laser_on_led" class="led off"></div>
+          </div>
+        </div>
+
+        <!-- Laser Fault LED -->
+        <div class="grid-item">
+
+          <div class="led-container">
+            <label for="laser_fault_led" class="led-label">FAULT</label>
+            <div id="laser_fault_led" class="led off"></div>
+          </div>
+        </div>
+
+        <!-- Show Graph Button -->
+        <div class="grid-item">
+          <label>SHOW</label>
+          <button class="button button-blue" id="showLaserGraphButton"
+            style="background-color: #3498db; color: white; width:90%; margin-right:10px; border: none;  ">
+            Graphs
+          </button>
+        </div>
+
       </div>
-
-      <!-- Laser On LED -->
-      <div class="led-container">
-        <label for="laser_on_led" class="led-label">ON/OFF</label>
-        <div id="laser_on_led" class="led off"></div>
-      </div>
-
-      <!-- Laser Current Input -->
-      <div class="grid-item">
-        <label for="laserDACvalue">Current DAC [0 - 255]</label>
-        <input type="number" id="laserDACvalue" step="1" min="0">
-      </div>
-
-      <!-- Send Button -->
-      <div class="grid-item">
-        <label>SET DAC</label>
-        <button class="button button-red" id="sendLaserValuesButton"
-          style="background-color: #e74c3c; width: 90%;">Send</button>
-      </div>
-
-
-      <!-- Show Graph Button -->
-      <div class="grid-item">
-        <label>SHOW</label>
-        <button class="button button-blue" id="showLaserGraphButton"
-          style="background-color: #3498db; color: white; width:90%; margin-right:10px; border: none;  ">
-          Graphs
-        </button>
-      </div>
-
     </div>
   </div>
   <!-- --------  /LASER  ------------------>
 
   <!-- ----------  TEC  ------------------->
-  <div style="margin-bottom: 20px;" class="container">
+  <div style="margin-bottom: 5px;" class="container">
     <label style="color: white; font-weight: bold; margin-bottom: 10px; font-size: 35px;">TEC</label>
 
-    <div class="control-grid" style="border-top: 3px solid black; padding: 20px;">
+    <div class="outer-grid" style="border-top: 2px solid black;">
 
-      <!-- ON/OFF Switch -->
-      <div class="grid-item">
-        <label for="tecToggle">ON/OFF</label>
-        <label class="switch">
-          <input type="checkbox" id="tecToggle">
-          <span class="slider round"></span>
-        </label>
+      <div class="left-side-grid" style="border-right: 2px solid black;">
+        <!-- ON/OFF Switch -->
+        <div class="grid-item">
+          <label for="tecToggle">ON/OFF</label>
+          <label class="switch">
+            <input type="checkbox" id="tecToggle">
+            <span class="slider round"></span>
+          </label>
+        </div>
+
+
+        <!-- TEC Current Input -->
+        <div class="grid-item">
+          <label for="tecDACvalue">Current DAC [0 - 255]</label>
+          <input type="number" id="tecDACvalue" step="1" min="0">
+        </div>
+
+        <!-- Send Button -->
+        <div class="grid-item">
+          <label>SET DAC</label>
+          <button class="button button-red" id="sendTecValuesButton"
+            style="background-color: #e74c3c; width: 90%;">Send</button>
+        </div>
+
       </div>
 
-      <!-- TEC Fault LED -->
-      <div class="led-container">
-        <label for="tec_fault_led" class="led-label">FAULT</label>
-        <div id="tec_fault_led" class="led off"></div>
-      </div>
+      <div class="right-side-grid">
 
-      <!-- TEC On LED -->
-      <div class="led-container">
-        <label for="tec_on_led" class="led-label">ON/OFF</label>
-        <div id="tec_on_led" class="led off"></div>
-      </div>
+        <!-- TEC On LED -->
+        <div class="grid-item">
+          <div class="led-container">
+            <label for="tec_on_led" class="led-label">ON/OFF</label>
+            <div id="tec_on_led" class="led off"></div>
+          </div>
+        </div>
 
-      <!-- TEC Current Input -->
-      <div class="grid-item">
-        <label for="tecDACvalue">Current DAC [0 - 255]</label>
-        <input type="number" id="tecDACvalue" step="1" min="0">
-      </div>
+        <!-- TEC Fault LED -->
+        <div class="grid-item">
+          <div class="led-container">
+            <label for="tec_fault_led" class="led-label">FAULT</label>
+            <div id="tec_fault_led" class="led off"></div>
+          </div>
+        </div>
 
-      <!-- Send Button -->
-      <div class="grid-item">
-        <label>SET DAC</label>
-        <button class="button button-red" id="sendTecValuesButton"
-          style="background-color: #e74c3c; width: 90%;">Send</button>
-      </div>
+        <!-- Show Graph Button -->
+        <div class="grid-item">
+          <label>SHOW</label>
+          <button class="button button-blue" id="showTecGraphButton"
+            style="background-color: #3498db; color: white; width:90%; margin-right:10px; border: none;  ">
+            Graphs
+          </button>
+        </div>
 
-      <!-- Show Graph Button -->
-      <div class="grid-item">
-        <label>SHOW</label>
-        <button class="button button-blue" id="showTecGraphButton"
-          style="background-color: #3498db; color: white; width:90%; margin-right:10px; border: none;  ">
-          Graphs
-        </button>
       </div>
 
     </div>
   </div>
+
   <!-- ----------  /TEC  ------------------->
 
 
   <div style="margin-bottom: 20px;" class="container">
     <label style="color: white; font-weight: bold; margin-bottom: 10px; font-size: 35px;">READINGS & TIMER</label>
-    
+
     <div class="control-grid_misc" style="border-top: 3px solid black; padding: 20px;">
       <div class="grid-item">
         <label>TOGGLE</label>
@@ -139,9 +162,6 @@
 
     </div> <!-- control-grid -->
   </div>
-
-  <!-- <div id="TEC Temperature" class="container"></div> -->
-  <!-- <div id="Heater Current" class="container"></div> -->
 
 </body>
 <script src="graphs.js"></script>

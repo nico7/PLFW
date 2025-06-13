@@ -6,6 +6,7 @@
 #include "laser.h"
 #include "oled.h"
 #include "tec.h"
+#include "version.h"
 
 #include "driver/adc.h"
 
@@ -238,9 +239,9 @@ void setup() {
           floatVal = 255;
         }
 
-        uint8_t dac_values[2] = {0, 0};
+        uint8_t dac_values[2] = { 0, 0 };
 
-        dac_values[1] = (uint8_t) floatVal;
+        dac_values[1] = (uint8_t)floatVal;
         // Use your function to set laser current
         dac_setpoint(LASER, dac_values);
 
@@ -252,38 +253,33 @@ void setup() {
       }
     });
 
-      server.on("/setTecDAC", HTTP_GET, [](AsyncWebServerRequest *request) 
-      {
-        if (request->hasParam("value")) 
-        {
-          String valStr = request->getParam("value")->value();
-          float floatVal = valStr.toFloat();
+    server.on("/setTecDAC", HTTP_GET, [](AsyncWebServerRequest *request) {
+      if (request->hasParam("value")) {
+        String valStr = request->getParam("value")->value();
+        float floatVal = valStr.toFloat();
 
-          // Clamp value between 0 and 65535 to fit uint16_t
-          if (floatVal < 0) 
-          {
-            floatVal = 0;
-          }
-          if (floatVal > 255) 
-          {
-            floatVal = 255;
-          }
-
-          uint8_t dac_values[2] = {0, 0};
-
-          dac_values[1] = (uint8_t) floatVal;
-
-          // Use your function to set TEC DAC
-          dac_setpoint(TEC, dac_values);
-
-          Serial.printf("TEC DAC set to: %u mA\n", dac_values[1]);
-
-          request->send(200, "text/plain", "TEC DAC set to " + String(dac_values[1]) + " mA");
-        } else 
-        {
-          request->send(400, "text/plain", "Missing 'value' parameter");
+        // Clamp value between 0 and 65535 to fit uint16_t
+        if (floatVal < 0) {
+          floatVal = 0;
         }
-      });
+        if (floatVal > 255) {
+          floatVal = 255;
+        }
+
+        uint8_t dac_values[2] = { 0, 0 };
+
+        dac_values[1] = (uint8_t)floatVal;
+
+        // Use your function to set TEC DAC
+        dac_setpoint(TEC, dac_values);
+
+        Serial.printf("TEC DAC set to: %u mA\n", dac_values[1]);
+
+        request->send(200, "text/plain", "TEC DAC set to " + String(dac_values[1]) + " mA");
+      } else {
+        request->send(400, "text/plain", "Missing 'value' parameter");
+      }
+    });
 
     server.on("/laserOn", HTTP_GET, [](AsyncWebServerRequest *request) {
       request->send_P(200, "text/plain", laser_is_enabled() ? "1" : "0");
