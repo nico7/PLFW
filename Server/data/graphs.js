@@ -9,20 +9,20 @@ const height = window.innerHeight;
 
 
 
-let showingTecChart = false;
-const tecOutputContainer = document.getElementById('tecOutputContainer');
-const tecToggleButton = document.getElementById('toggleTecTempButton');
+let showingTempChart = false;
+const tempOutputContainer = document.getElementById('tempOutputContainer');
+const tempToggleButton = document.getElementById('toggleTecTempButton');
 
-tecToggleButton.addEventListener('click', () => {
+tempToggleButton.addEventListener('click', () => {
   // Clear the container
-  tecOutputContainer.innerHTML = '';
+  tempOutputContainer.innerHTML = '';
 
-  if (showingTecChart) {
+  if (showingTempChart) {
     // Revert to number output
     const outputField = document.createElement('span');
-    outputField.id = 'tecOutputField';
+    outputField.id = 'tempOutputField';
     outputField.textContent = ''; // Or set dynamic value here
-    tecOutputContainer.appendChild(outputField);
+    tempOutputContainer.appendChild(outputField);
 
     // Destroy the Highcharts instance if it exists
     Highcharts.charts.forEach(chart => {
@@ -35,7 +35,7 @@ tecToggleButton.addEventListener('click', () => {
     const chartDiv = document.createElement('div');
     chartDiv.id = 'TEC Temperature';
     chartDiv.className = 'container';
-    tecOutputContainer.appendChild(chartDiv);
+    tempOutputContainer.appendChild(chartDiv);
 
     // Create the chart
     var tecTemperatureChart = new Highcharts.Chart({
@@ -105,7 +105,7 @@ tecToggleButton.addEventListener('click', () => {
     }, sampling_period_ms);
   }
 
-  showingTecChart = !showingTecChart;
+  showingTempChart = !showingTempChart;
 });
 
 
@@ -118,7 +118,7 @@ setInterval(function () {
       var x = (new Date()).getTime();
       var y = parseFloat(this.responseText);
 
-      if (showingTecChart) {
+      if (showingTempChart) {
         // Update the chart
         if (tecTemperatureChart.series[0].data.length > data_buffer) {
           tecTemperatureChart.series[0].addPoint([x, y], true, true, false);
@@ -127,7 +127,7 @@ setInterval(function () {
         }
       } else {
         // Update the numeric field
-        const outputField = document.getElementById('tecOutputField');
+        const outputField = document.getElementById('tempOutputField');
         if (outputField) {
           outputField.textContent = y; // Optional: format to 2 decimal places
         }
@@ -468,7 +468,7 @@ setInterval(() => {
 
 let laserWindow = null;
 let showingLaserChart = false;
-let lastValue = 0;
+let lastLaserValue = 0;
 const laserButton = document.getElementById("showLaserGraphButton");
 const laserOutputContainer = document.getElementById('laserOutputContainer');
 
@@ -492,6 +492,7 @@ laserButton.addEventListener("click", function () {
     renderLaserNumberOutput(); // Show number + label
   }
   showingLaserChart = !showingLaserChart;
+  console.log("laserChart = " + showingLaserChart);
 });
 
 // Function to render the label + numeric output
@@ -512,7 +513,7 @@ function renderLaserNumberOutput() {
   const outputField = document.createElement('span');
   outputField.id = 'laserOutputField';
   outputField.className = 'live';
-  outputField.textContent = lastValue;
+  outputField.textContent = lastLaserValue;
   
 
   wrapper.appendChild(label);
@@ -541,8 +542,8 @@ setInterval(function () {
                 // Update the numeric field
         const outputField = document.getElementById('laserOutputField');
         if (outputField) {
-          lastValue = y;
-          outputField.textContent = lastValue; // Optional: format to 2 decimal places
+          lastLaserValue = y;
+          outputField.textContent = lastLaserValue; // Optional: format to 2 decimal places
         }
       }
     }
@@ -551,34 +552,92 @@ setInterval(function () {
   xhttp.send();
 }, slow_sampling_period_ms);
 
-
-
-
 let tecWindow = null;
+let showingTecChart = false;
+let lastTecValue = 0;
 const tecButton = document.getElementById("showTecGraphButton");
+const tecOutputContainer = document.getElementById('tecOutputContainer');
 
+// Click handler to toggle between graph and number
 tecButton.addEventListener("click", function () {
-  // If the window is closed or never opened, open it
-  if (!tecWindow || tecWindow.closed) {
-    tecWindow = window.open("/tec-graph.html", "_blank", `width=${width},height=${height}`);
+
+  tecOutputContainer.innerHTML = '';
+  if(!showingTecGraph) {
+    const width = 800;
+    const height = 600;
+    tecWindow = window.open("tec-graph.html", "_blank",  `width=${width},height=${height}`);
     tecButton.textContent = "Number";
+    showingTecGraph = true;
   } else {
-    tecWindow.close();
+    if (tecWindow && !tecWindow.closed) {
+      tecWindow.close();
+    }
+    tecWindow = null;
+    showingTecGraph = false;
     tecButton.textContent = "Graph";
+    renderTecNumberOutput();  // Show number + label
   }
+  showingTecChart = !showingTecChart;
 });
 
-// Optional: check if user closed the popup manually and update button
-setInterval(() => {
-  if (tecWindow && tecWindow.closed) {
+// Function to render TEC label + numeric output
+function renderTecNumberOutput() {
+  tecOutputContainer.innerHTML = '';
+
+  const wrapper = document.createElement('div');
+  wrapper.style.display = 'flex';
+  wrapper.style.alignItems = 'center';
+  wrapper.style.gap = '10px';
+
+  const label = document.createElement('span');
+  label.id = 'tecCurrentLabel';
+  label.textContent = 'Current (mA):';
+  label.style.fontSize = '20px';
+  label.style.fontFamily = 'Calibri, Arial, sans-serif';
+
+  const outputField = document.createElement('span');
+  outputField.id = 'tecOutputField';
+  outputField.className = 'live';
+  outputField.textContent = lastTecValue;
+
+  wrapper.appendChild(label);
+  wrapper.appendChild(outputField);
+  tecOutputContainer.appendChild(wrapper);
+}
+
+// Watchdog: check if user closed the popup manually
+setInterval(()=> {
+  if (!tecWindow || tecWindow.closed) {
+    tecWindow = null;
+    showingTecGraph = false;
     tecButton.textContent = "Graph";
+    renderTecNumberOutput();
   }
-}, 500);
+}, slow_sampling_period_ms);
 
 
-// document.getElementById("showTecGraphButton").addEventListener("click", function () {
-//   window.open("/tec-graph.html", "_blank", `width=${width / 3},height=${height / 2}`);
-// });
+// This part below is for updating just the numeric value
+setInterval(function () {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function () {
+    if(this.readyState === 4 && this.status === 200) {
+      var y = parseFloat(this.responseText);
+
+      if(!showingTecChart) {
+        // Update the numeric field
+        const outputField = document.getElementById('tecOutputField');
+        if(outputField) {
+          lastTecValue = y;
+          outputField.textContent = lastTecValue;
+        }
+      }
+    }
+  };
+  xhttp.open("GET", "/teccurrent", true);
+  xhttp.send();
+}, slow_sampling_period_ms);
+
+
 
 function scaleToFit() {
   const baseWidth = 1920;

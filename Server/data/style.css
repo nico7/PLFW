@@ -562,6 +562,7 @@ label {
 }
 
 #heaterOutputField,
+#tempOutputField,
 #tecOutputField {
   display: inline-block;
   min-width: 120px;
@@ -582,6 +583,7 @@ label {
 
 /* Optional: Live update pulse effect */
 #heaterOutputField.live,
+#tempOutputField.live,
 #tecOutputField.live {
   animation: pulse-glow 1.5s infinite ease-in-out;
 }

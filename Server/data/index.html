@@ -135,6 +135,12 @@
             style="background-color: #3498db; color: white; width:90%; margin-right:10px; border: none;  ">
             Graphs
           </button>
+          <div id="tecOutputContainer">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span id="tecCurrentLabel">Current (mA):</span>
+              <span id="tecOutputField" class="live"></span>
+            </div>
+          </div>
         </div>
 
       </div>
@@ -151,15 +157,15 @@
     <div class="control-grid_misc" style="border-top: 3px solid black; padding: 20px;">
       <div class="grid-item">
         <label>TOGGLE</label>
-        <button class="button button-orange" id="toggleTecTempButton" style="width: 90%;">Temperature Reading</button>
-        <div id="tecOutputContainer">
-          <span id="tecOutputField" class="live">1</span>
+        <button class="button button-orange" id="toggleTecTempButton" style="width: 90%;">Temperature Graph</button>
+        <div id="tempOutputContainer">
+          <span id="tempOutputField" class="live">1</span>
         </div>
       </div>
 
       <div class="grid-item">
         <label>TOGGLE</label>
-        <button class="button button-yellow" id="toggleHeaterButton" style="width: 90%;">Current Reading</button>
+        <button class="button button-yellow" id="toggleHeaterButton" style="width: 90%;">Heater Graph</button>
         <div id="heaterOutputContainer">
           <span id="heaterOutputField" class="live">2</span>
         </div>
