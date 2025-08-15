@@ -271,25 +271,6 @@ label {
   background-color: #0056b3;
 }
 
-#laserOutputField {
-  display: inline-block;
-  padding: 14px 20px;
-  font-size: 22px;
-  font-family: Calibri, Arial, sans-serif;
-  color: #f57474;
-  background: rgba(0, 0, 0, 0.85);
-  border: 1px solid #edef82;
-  border-radius: 10px;
-  box-shadow: 0 0 12px #d65017, inset 0 0 6px #6b1042;
-  text-align: center;
-  letter-spacing: 1px;
-}
-
-#laserOutputField.live {
-  animation: pulse-glow 20s infinite ease-in-out;
-}
-
-
 .led-container {
   display: flex;
   flex-direction: column;
@@ -563,29 +544,26 @@ label {
 
 #heaterOutputField,
 #tempOutputField,
-#tecOutputField {
+#tecOutputField,
+#laserOutputField {
   display: inline-block;
-  min-width: 120px;
   padding: 14px 20px;
-  font-size: 28px;
+  font-size: 22px;
   font-family: Calibri, Arial, sans-serif;
-  color: #ff4800;
+  color: #f57474;
   background: rgba(0, 0, 0, 0.85);
-  border: 2px solid #ffffff;
+  border: 1px solid #edef82;
   border-radius: 10px;
-  box-shadow: 0 0 12px #f50808, inset 0 0 6px #fda400;
+  box-shadow: 0 0 12px #d65017, inset 0 0 6px #6b1042;
   text-align: center;
   letter-spacing: 1px;
-  margin: 8px;
-  user-select: none;
-  transition: all 0.3s ease;
 }
 
-/* Optional: Live update pulse effect */
 #heaterOutputField.live,
 #tempOutputField.live,
-#tecOutputField.live {
-  animation: pulse-glow 1.5s infinite ease-in-out;
+#tecOutputField.live, 
+#laserOutputField.live {
+  animation: pulse-glow 20s infinite ease-in-out;
 }
 
 /* Shared keyframes animation (if desired) */
